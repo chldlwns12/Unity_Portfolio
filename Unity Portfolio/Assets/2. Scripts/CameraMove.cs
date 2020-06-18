@@ -4,15 +4,18 @@ using UnityEngine;
 
 public class CameraMove : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    public GameObject Player;
 
-    // Update is called once per frame
-    void Update()
+    public float offsetY = 25f;
+    public float offsetZ = -16f;
+
+    Vector3 cameraPosition;
+
+    private void LateUpdate()
     {
-        
+        cameraPosition.y = Player.transform.position.y + offsetY;
+        cameraPosition.z = Player.transform.position.z + offsetZ;
+
+        transform.position = cameraPosition;
     }
 }
