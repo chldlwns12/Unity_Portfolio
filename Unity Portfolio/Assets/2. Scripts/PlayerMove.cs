@@ -1,51 +1,44 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class PlayerMove : MonoBehaviour
 {
     Rigidbody rb;
-    public float playerSpeed = 15.0f;
-    public VariableJoystick joystick;
+    public float playerSpeed = 5.0f;
+    public Animator Anim;
 
-    public static PlayerMove Instance;
-    private void Awake()
+    public static PlayerMove Instance
     {
-        if(Instance)
+        get
         {
-            DestroyImmediate(gameObject);
-            return;
+            if(instance == null)
+            {
+                instance = FindObjectOfType<PlayerMove>();
+                if (instance == null)
+                {
+                    var instanceContainer = new GameObject("PlayerMove");
+                    instance = instanceContainer.AddComponent<PlayerMove>();
+                }
+            }
+            return instance;
         }
-
-        Instance = this;
-        DontDestroyOnLoad(gameObject);
     }
+    private static PlayerMove instance;
 
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
+        Anim = GetComponent<Animator>();
     }
 
     private void FixedUpdate()
     {
-        float moveHorizontal = Input.GetAxis("Horizontal");
-        float moveVertical = Input.GetAxis("Vertical");
-
-        if (moveHorizontal == 0 && moveVertical == 0)
+        if (JoyStickMove.Instance.joyVec.x != 0 || JoyStickMove.Instance.joyVec.z != 0)
         {
-            moveHorizontal = joystick.Horizontal;
-            moveVertical = joystick.Vertical;
+            rb.velocity = new Vector3(JoyStickMove.Instance.joyVec.x * playerSpeed, 0, JoyStickMove.Instance.joyVec.y * playerSpeed) * playerSpeed;
+            rb.rotation = Quaternion.LookRotation(new Vector3(JoyStickMove.Instance.joyVec.x, 0, JoyStickMove.Instance.joyVec.y));
         }
-
-        Debug.Log("moveHorizontal : " + moveHorizontal + " / moveVertical : " + moveVertical);
-
-        Vector3 dir = new Vector3(moveHorizontal, 0, moveVertical);
-
-        transform.Translate(dir * playerSpeed * Time.deltaTime);
-
-        Vector3 position = transform.position;
-        position.x = Mathf.Clamp(position.x, -2.5f, 2.6f);
-        position.z = Mathf.Clamp(position.z, -7f, 6.8f);
-        transform.position = position;
     }
 }

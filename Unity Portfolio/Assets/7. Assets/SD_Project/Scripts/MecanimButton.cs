@@ -7,7 +7,20 @@ public class MecanimButton : MonoBehaviour
 	public string int_name;
 	public int event_value;
 
-	void OnMouseDown ()
+    //public static MecanimButton Instance;
+    //private void Awake()
+    //{
+    //    if(Instance)
+    //    {
+    //        DestroyImmediate(gameObject);
+    //        return;
+    //    }
+    //
+    //    Instance = this;
+    //    DontDestroyOnLoad(gameObject);
+    //}
+
+    void OnMouseDown ()
 	{
 		Debug.Log ("Triggered : " + int_name);
 		//animator.SetTrigger(trigger_name);
