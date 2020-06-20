@@ -12,6 +12,9 @@ public class PlayerTargeting : MonoBehaviour
     int targetIndex = -1;
     public LayerMask layerMask;
 
+    public float attackCount = 2.0f;
+    float currentCount = 0.0f;
+
     public List<GameObject> monsterList = new List<GameObject>();
 
     public GameObject playerBolt;
@@ -79,8 +82,14 @@ public class PlayerTargeting : MonoBehaviour
        if(getATarget && !JoyStickMove.Instance.isPlayerMoving)
         {
             transform.LookAt(new Vector3(monsterList[targetIndex].transform.position.x, transform.position.y, monsterList[targetIndex].transform.position.z));
-            Attack();
+            currentCount += Time.deltaTime;
+            if(currentCount > attackCount)
+            {
+                Attack();
+                currentCount = 0.0f;
+            }
 
+            Debug.Log("Attack");
             if(PlayerMove.Instance.Anim.GetCurrentAnimatorStateInfo(0).IsName("Idle"))
             {
                 PlayerMove.Instance.Anim.SetBool("Idle", false);
@@ -90,7 +99,8 @@ public class PlayerTargeting : MonoBehaviour
         }
        else if(JoyStickMove.Instance.isPlayerMoving)
         {
-            if(!PlayerMove.Instance.Anim.GetCurrentAnimatorStateInfo(0).IsName("Walk"))
+            currentCount = 0.0f;
+            if (!PlayerMove.Instance.Anim.GetCurrentAnimatorStateInfo(0).IsName("Walk"))
             {
                 PlayerMove.Instance.Anim.SetBool("Idle", false);
                 PlayerMove.Instance.Anim.SetBool("Walk", true);

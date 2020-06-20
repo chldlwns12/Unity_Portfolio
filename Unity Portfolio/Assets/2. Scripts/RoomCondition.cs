@@ -28,7 +28,7 @@ public class RoomCondition : MonoBehaviour
             //플레이어가 방에 들어오면 이방의 몹리스트를 링크(복사)시킨다.
             playerInThisRoom = true;
             PlayerTargeting.Instance.monsterList = new List<GameObject>(MonsterListInRoom);
-            Debug.Log("Enter New Room! Mob Count :" + PlayerTargeting.Instance.MonsterList.Count);
+            Debug.Log("Enter New Room! Mob Count :" + PlayerTargeting.Instance.monsterList.Count);
             //Debug.Log("Player Enter New Room!");
         }
         if(other.CompareTag("Monster"))
