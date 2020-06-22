@@ -11,9 +11,9 @@ public class Bullet : MonoBehaviour
     }
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log("Name : " + other.transform.name);
         if(other.transform.CompareTag("Wall") || other.transform.CompareTag("Monster"))
         {
+            Debug.Log("Name : " + other.transform.name);
             GetComponent<Rigidbody>().velocity = Vector3.zero;
             Destroy(gameObject, 0.2f);
         }
@@ -21,9 +21,9 @@ public class Bullet : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        Debug.Log("Name : " + collision.transform.name);
         if (collision.transform.CompareTag("Wall") || collision.transform.CompareTag("Monster"))
         {
+            Debug.Log("Name : " + collision.transform.name);
             GetComponent<Rigidbody>().velocity = Vector3.zero;
             Destroy(gameObject, 0.2f);
         }

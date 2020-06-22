@@ -12,13 +12,15 @@ public class PlayerTargeting : MonoBehaviour
     int targetIndex = -1;
     public LayerMask layerMask;
 
-    public float attackCount = 2.0f;
-    float currentCount = 0.0f;
+    //public float attackCount = 1.0f;
+    //float currentCount = 0.0f;
 
     public List<GameObject> monsterList = new List<GameObject>();
 
     public GameObject playerBolt;
     public Transform AttackPoint;
+
+    public float atkSpeed = 1.0f;
 
     public static PlayerTargeting Instance
     {
@@ -56,7 +58,7 @@ public class PlayerTargeting : MonoBehaviour
 
                 if(isHit && hit.transform.CompareTag("Monster"))
                 {
-                    if(targetDist >= currentDist)
+                    if (targetDist >= currentDist)
                     {
                         targetIndex = i;
                         targetDist = currentDist;
@@ -82,12 +84,12 @@ public class PlayerTargeting : MonoBehaviour
        if(getATarget && !JoyStickMove.Instance.isPlayerMoving)
         {
             transform.LookAt(new Vector3(monsterList[targetIndex].transform.position.x, transform.position.y, monsterList[targetIndex].transform.position.z));
-            currentCount += Time.deltaTime;
-            if(currentCount > attackCount)
-            {
-                Attack();
-                currentCount = 0.0f;
-            }
+            //currentCount += Time.deltaTime;
+            //if(currentCount > attackCount)
+            //{
+            //    Attack();
+            //    currentCount = 0.0f;
+            //}
 
             Debug.Log("Attack");
             if(PlayerMove.Instance.Anim.GetCurrentAnimatorStateInfo(0).IsName("Idle"))
@@ -99,7 +101,7 @@ public class PlayerTargeting : MonoBehaviour
         }
        else if(JoyStickMove.Instance.isPlayerMoving)
         {
-            currentCount = 0.0f;
+            //currentCount = 0.0f;
             if (!PlayerMove.Instance.Anim.GetCurrentAnimatorStateInfo(0).IsName("Walk"))
             {
                 PlayerMove.Instance.Anim.SetBool("Idle", false);
@@ -111,6 +113,29 @@ public class PlayerTargeting : MonoBehaviour
 
     void Attack()
     {
+        PlayerMove.Instance.Anim.SetFloat("AttackSpeed", atkSpeed);
         Instantiate(playerBolt, AttackPoint.position, transform.rotation);
+    }
+
+    private void OnDrawGizmos()
+    {
+        if(getATarget)
+        {
+            for (int i = 0; i < monsterList.Count; i++)
+            {
+                RaycastHit hit;
+                bool isHit = Physics.Raycast(AttackPoint.transform.position, monsterList[i].transform.position - AttackPoint.transform.position, out hit, 20f, layerMask);
+
+                if(isHit && hit.transform.CompareTag("Monster"))
+                {
+                    Gizmos.color = Color.green;
+                }
+                else
+                {
+                    Gizmos.color = Color.red;
+                }
+                Gizmos.DrawRay(AttackPoint.transform.position, monsterList[i].transform.position - AttackPoint.transform.position);
+            }
+        }
     }
 }

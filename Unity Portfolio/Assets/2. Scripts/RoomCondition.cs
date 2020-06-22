@@ -8,6 +8,11 @@ public class RoomCondition : MonoBehaviour
     public bool playerInThisRoom = false;
     public bool isClearRoom = false;
 
+    private void Start()
+    {
+        
+    }
+
     // Update is called once per frame
     void Update()
     {
@@ -23,6 +28,11 @@ public class RoomCondition : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        if(other.CompareTag("Monster"))
+        {
+            MonsterListInRoom.Add(other.gameObject);
+            Debug.Log("Mob name :" + other.gameObject);
+        }
         if(other.CompareTag("Player"))
         {
             //플레이어가 방에 들어오면 이방의 몹리스트를 링크(복사)시킨다.
@@ -30,11 +40,6 @@ public class RoomCondition : MonoBehaviour
             PlayerTargeting.Instance.monsterList = new List<GameObject>(MonsterListInRoom);
             Debug.Log("Enter New Room! Mob Count :" + PlayerTargeting.Instance.monsterList.Count);
             //Debug.Log("Player Enter New Room!");
-        }
-        if(other.CompareTag("Monster"))
-        {
-            MonsterListInRoom.Add(other.gameObject);
-            Debug.Log("Mob name :" + other.gameObject.name);
         }
     }
 

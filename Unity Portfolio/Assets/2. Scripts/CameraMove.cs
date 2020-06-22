@@ -30,6 +30,12 @@ public class CameraMove : MonoBehaviour
     }
     private static CameraMove instance;
 
+    private void Start()
+    {
+        CameraNextRoom();
+        
+    }
+
     private void LateUpdate()
     {
         cameraPosition.y = Player.transform.position.y + offsetY;
