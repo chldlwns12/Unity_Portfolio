@@ -8,6 +8,8 @@ public class RoomCondition : MonoBehaviour
     public bool playerInThisRoom = false;
     public bool isClearRoom = false;
 
+    public int playerInRoomIndex;
+
     private void Start()
     {
         

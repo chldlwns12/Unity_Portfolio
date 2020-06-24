@@ -13,17 +13,31 @@ public class HpBar : MonoBehaviour
     public GameObject HpLineFolder;
     float unitHp = 200f;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    public Text playerHpText;
 
-    // Update is called once per frame
+    public static HpBar Instance
+    {
+        get
+        {
+            if (instance == null)
+            {
+                instance = FindObjectOfType<HpBar>();
+                if (instance == null)
+                {
+                    var instanceContainer = new GameObject("HpBar");
+                    instance = instanceContainer.AddComponent<HpBar>();
+                }
+            }
+            return instance;
+        }
+    }
+    private static HpBar instance;
+
     void Update()
     {
         transform.position = Player.transform.position;
         hpBar.value = currentHp / maxHp;
+        playerHpText.text = "" + currentHp;
     }
 
     public void GetHpBoost()

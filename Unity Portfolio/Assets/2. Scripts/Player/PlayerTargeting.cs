@@ -1,19 +1,18 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerTargeting : MonoBehaviour
 {
     public bool getATarget = false;
-    float currentDist = 0;
-    float closetDist = 100f;
-    float targetDist = 100f;
-    int closeDistIndex = 0;
-    int targetIndex = -1;
+    float currentDist = 0;                  //현재 거리
+    float closetDist = 100f;                //가까운 거리
+    float targetDist = 100f;                //타겟 거리
+    int closeDistIndex = 0;                //가장 가까운 인덱스
+    public int targetIndex = -1;                  //타겟팅 할 인덱스
+    int prevTargetIndex = 0;
     public LayerMask layerMask;
-
-    //public float attackCount = 1.0f;
-    //float currentCount = 0.0f;
 
     public List<GameObject> monsterList = new List<GameObject>();
 
@@ -42,37 +41,50 @@ public class PlayerTargeting : MonoBehaviour
 
     void Update()
     {
-       if(monsterList.Count != 0)
+        SetTarget();
+        AttackTarget();
+    }
+
+    private void SetTarget()
+    {
+        if (monsterList.Count != 0)
         {
+            prevTargetIndex = targetIndex;
             currentDist = 0f;
             closeDistIndex = 0;
             targetIndex = -1;
 
             for (int i = 0; i < monsterList.Count; i++)
             {
-                currentDist = Vector3.Distance(transform.position, monsterList[i].transform.position);
+                if (monsterList[i] == null) { return; }
+                currentDist = Vector3.Distance(transform.position, monsterList[i].transform.GetChild(0).position);
 
                 RaycastHit hit;
-                bool isHit = Physics.Raycast(transform.position, monsterList[i].transform.position - transform.position,
-                    out hit, 20f, layerMask);
+                bool isHit = Physics.Raycast(transform.position, monsterList[i].transform.GetChild(0).position - transform.position,
+                                             out hit, 20f, layerMask);
 
-                if(isHit && hit.transform.CompareTag("Monster"))
+                if (isHit && hit.transform.CompareTag("Monster"))
                 {
                     if (targetDist >= currentDist)
                     {
                         targetIndex = i;
                         targetDist = currentDist;
+
+                        if (!JoyStickMove.Instance.isPlayerMoving && prevTargetIndex != targetIndex)
+                        {
+                            targetIndex = prevTargetIndex;
+                        }
                     }
                 }
 
-                if(closetDist >= currentDist)
+                if (closetDist >= currentDist)
                 {
                     closeDistIndex = i;
                     closetDist = currentDist;
                 }
             }
 
-            if(targetIndex == -1)
+            if (targetIndex == -1)
             {
                 targetIndex = closeDistIndex;
             }
@@ -80,26 +92,29 @@ public class PlayerTargeting : MonoBehaviour
             targetDist = 100f;
             getATarget = true;
         }
+    }
 
-       if(getATarget && !JoyStickMove.Instance.isPlayerMoving)
+
+    private void AttackTarget()
+    {
+        if (targetIndex == -1 || monsterList.Count == 0)  // 추가 
         {
-            transform.LookAt(new Vector3(monsterList[targetIndex].transform.position.x, transform.position.y, monsterList[targetIndex].transform.position.z));
-            //currentCount += Time.deltaTime;
-            //if(currentCount > attackCount)
-            //{
-            //    Attack();
-            //    currentCount = 0.0f;
-            //}
+            PlayerMove.Instance.Anim.SetBool("Attack", false);
+            return;
+        }
+        if (getATarget && !JoyStickMove.Instance.isPlayerMoving && monsterList.Count != 0)
+        {
+            transform.LookAt(monsterList[targetIndex].transform.GetChild(0));
 
             Debug.Log("Attack");
-            if(PlayerMove.Instance.Anim.GetCurrentAnimatorStateInfo(0).IsName("Idle"))
+            if (PlayerMove.Instance.Anim.GetCurrentAnimatorStateInfo(0).IsName("Idle"))
             {
                 PlayerMove.Instance.Anim.SetBool("Idle", false);
                 PlayerMove.Instance.Anim.SetBool("Walk", false);
                 PlayerMove.Instance.Anim.SetBool("Attack", true);
             }
         }
-       else if(JoyStickMove.Instance.isPlayerMoving)
+        else if (JoyStickMove.Instance.isPlayerMoving)
         {
             //currentCount = 0.0f;
             if (!PlayerMove.Instance.Anim.GetCurrentAnimatorStateInfo(0).IsName("Walk"))
@@ -123,10 +138,12 @@ public class PlayerTargeting : MonoBehaviour
         {
             for (int i = 0; i < monsterList.Count; i++)
             {
+                if (monsterList[i] == null) { return; }
                 RaycastHit hit;
-                bool isHit = Physics.Raycast(AttackPoint.transform.position, monsterList[i].transform.position - AttackPoint.transform.position, out hit, 20f, layerMask);
+                bool isHit = Physics.Raycast(transform.position, monsterList[i].transform.GetChild(0).position - transform.position,
+                                             out hit, 20f, layerMask);
 
-                if(isHit && hit.transform.CompareTag("Monster"))
+                if (isHit && hit.transform.CompareTag("Monster"))
                 {
                     Gizmos.color = Color.green;
                 }
@@ -134,7 +151,7 @@ public class PlayerTargeting : MonoBehaviour
                 {
                     Gizmos.color = Color.red;
                 }
-                Gizmos.DrawRay(AttackPoint.transform.position, monsterList[i].transform.position - AttackPoint.transform.position);
+                Gizmos.DrawRay(transform.position, monsterList[i].transform.GetChild(0).position - transform.position);
             }
         }
     }

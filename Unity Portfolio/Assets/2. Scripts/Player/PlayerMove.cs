@@ -49,5 +49,24 @@ public class PlayerMove : MonoBehaviour
             Debug.Log("Get Next Room");
             StageMgr.Instance.NextStage();
         }
+
+        if (other.transform.CompareTag("HpBooster"))
+        {
+            HpBar.Instance.GetHpBoost();
+            Destroy(other.gameObject);
+        }
+
+        if (other.transform.CompareTag("MeleeAtk"))
+        {
+            other.transform.parent.GetComponent<EnemyOne>().meleeAtkArea.SetActive(false);
+            HpBar.Instance.currentHp -= other.transform.parent.GetComponent<EnemyOne>().damage * 2f;
+        
+            if (!Anim.GetCurrentAnimatorStateInfo(0).IsName("Dmg"))
+            {
+                Anim.SetTrigger("Dmg");
+                Instantiate(EffectSet.Instance.PlayerDmgEffect, PlayerTargeting.Instance.AttackPoint.position, Quaternion.Euler(90, 0, 0));
+            }
+        
+        }
     }
 }
