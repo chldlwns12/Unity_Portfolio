@@ -66,7 +66,6 @@ public class PlayerMove : MonoBehaviour
                 Anim.SetTrigger("Dmg");
                 Instantiate(EffectSet.Instance.PlayerDmgEffect, PlayerTargeting.Instance.AttackPoint.position, Quaternion.Euler(90, 0, 0));
             }
-        
         }
     }
 }
