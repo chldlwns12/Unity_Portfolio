@@ -106,7 +106,7 @@ public class PlayerTargeting : MonoBehaviour
         {
             transform.LookAt(monsterList[targetIndex].transform.GetChild(0));
 
-            Debug.Log("Attack");
+            //Debug.Log("Attack");
             if (PlayerMove.Instance.Anim.GetCurrentAnimatorStateInfo(0).IsName("Idle"))
             {
                 PlayerMove.Instance.Anim.SetBool("Idle", false);

@@ -46,7 +46,7 @@ public class PlayerMove : MonoBehaviour
     {
         if(other.transform.CompareTag("NextRoom"))
         {
-            Debug.Log("Get Next Room");
+            //Debug.Log("Get Next Room");
             StageMgr.Instance.NextStage();
         }
 

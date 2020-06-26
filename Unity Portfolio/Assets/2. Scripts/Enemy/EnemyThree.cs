@@ -73,7 +73,7 @@ public class EnemyThree : MonoBehaviour
             yield return null;
             if (!lookAtPlayer) break;
 
-            Debug.Log("Set Player.transform.position");
+            //Debug.Log("Set Player.transform.position");
             transform.LookAt(player.transform.position);
             DangerMarKerShoot();
         }
@@ -89,10 +89,10 @@ public class EnemyThree : MonoBehaviour
         {
             Physics.Raycast(NewPosition, NewDir, out RaycastHit hit, 30f, layerMask);
 
-            Debug.Log("name : " + hit.transform.name + "position : " + hit.point);
+            //Debug.Log("name : " + hit.transform.name + "position : " + hit.point);
 
             lr.positionCount++;
-            Debug.Log("position : " + hit.point);
+            //Debug.Log("position : " + hit.point);
             lr.SetPosition(i, hit.point);
 
             NewPosition = hit.point;
@@ -103,10 +103,10 @@ public class EnemyThree : MonoBehaviour
     private void DangerMarKerDeactive()
     {
         lookAtPlayer = false;
-        Debug.Log("lr.positionCount : " + lr.positionCount);
+        //Debug.Log("lr.positionCount : " + lr.positionCount);
         for (int i = 0; i < lr.positionCount; i++)
         {
-            Debug.Log("Set Vector3.zero");
+            //Debug.Log("Set Vector3.zero");
             lr.SetPosition(i, Vector3.zero);
         }
         lr.positionCount = 0;

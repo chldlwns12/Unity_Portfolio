@@ -32,8 +32,8 @@ public class EnemyBase : MonoBehaviour
     protected void Start()
     {
         Player = GameObject.FindGameObjectWithTag("Player");
-        Debug.Log("Player : " + Player);
-        Debug.Log("Player.transform.position : " + Player.transform.position);
+        //Debug.Log("Player : " + Player);
+        //Debug.Log("Player.transform.position : " + Player.transform.position);
 
         nvAgent = GetComponent<NavMeshAgent>();
         rb = GetComponent<Rigidbody>();
@@ -53,7 +53,7 @@ public class EnemyBase : MonoBehaviour
 
         if (hit.transform == null)
         {
-            Debug.Log(" hit.transform == null");
+            //Debug.Log(" hit.transform == null");
             return false;
         }
 
