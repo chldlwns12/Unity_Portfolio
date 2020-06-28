@@ -36,6 +36,8 @@ public class Bullet : MonoBehaviour
 
             if (currentDis > 5f) continue;
 
+            Debug.Log("currentDis : " + currentDis);
+            Debug.Log("closetDis : " + closetDis);
             if(closetDis > currentDis)
             {
                 closetDis = currentDis;
@@ -48,6 +50,7 @@ public class Bullet : MonoBehaviour
             Destroy(gameObject, 0.2f);
             return Vector3.zero;
         }
+        Debug.Log("Name : " + PlayerTargeting.Instance.monsterList[closetIndex].name);
         return (PlayerTargeting.Instance.monsterList[closetIndex].transform.position - transform.position).normalized;
     }
 
@@ -57,13 +60,14 @@ public class Bullet : MonoBehaviour
         {
             if(PlayerData.Instance.playerSkill[0] != 0 && PlayerTargeting.Instance.monsterList.Count >= 2)
             {
-                int myIndex = PlayerTargeting.Instance.monsterList.IndexOf(other.gameObject.transform.parent.gameObject);
+                int myIndex = PlayerTargeting.Instance.monsterList.IndexOf(other.gameObject);
 
                 if(bounceCount > 0)
                 {
                     bounceCount--;
                     damage *= 0.7f;
                     newDir = ResultDir(myIndex) * 20f;
+                    transform.rotation = Quaternion.LookRotation(newDir);
                     rb.velocity = newDir;
                     return;
                 }
@@ -92,6 +96,7 @@ public class Bullet : MonoBehaviour
                     wallBounceCount--;
                     damage *= 0.5f;
                     newDir = Vector3.Reflect(newDir, collision.contacts[0].normal);
+                    transform.rotation = Quaternion.LookRotation(newDir);
                     rb.velocity = newDir * 20f;
                     return;
                 }

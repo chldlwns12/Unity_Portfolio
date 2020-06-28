@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class CameraMove : MonoBehaviour
 {
     public GameObject Player;
+    public Image fadeInOut;
 
     public float offsetY = 40f;
     public float offsetZ = -30f;
@@ -46,6 +47,21 @@ public class CameraMove : MonoBehaviour
 
     public void CameraNextRoom()
     {
+        StartCoroutine(FadeInOut());
         cameraPosition.x = Player.transform.position.x;
+    }
+
+    IEnumerator FadeInOut()
+    {
+        float alpha = 1;
+        fadeInOut.color = new Vector4(1, 1, 1, alpha);
+        yield return new WaitForSeconds(0.3f);
+
+        while (alpha >= 0)
+        {
+            fadeInOut.color = new Vector4(1, 1, 1, alpha);
+            alpha -= 0.02f;
+            yield return null;
+        }
     }
 }

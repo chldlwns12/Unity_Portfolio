@@ -26,8 +26,8 @@ public class PlayerData : MonoBehaviour
     //public float maxHp;
     //public float currentHp;
     //public GameObject player;
-
-    public GameObject playerBullet;
+    //public GameObject playerBullet;
+    public GameObject[] PlayerBullet;
 
     public List<int> playerSkill = new List<int>();
 }

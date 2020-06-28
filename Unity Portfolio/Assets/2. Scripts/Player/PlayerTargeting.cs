@@ -16,7 +16,7 @@ public class PlayerTargeting : MonoBehaviour
 
     public List<GameObject> monsterList = new List<GameObject>();
 
-    public GameObject playerBolt;
+    //public GameObject playerBolt;
     public Transform AttackPoint;
 
     public float atkSpeed = 1.0f;
@@ -129,7 +129,28 @@ public class PlayerTargeting : MonoBehaviour
     void Attack()
     {
         PlayerMove.Instance.Anim.SetFloat("AttackSpeed", atkSpeed);
-        Instantiate(playerBolt, AttackPoint.position, transform.rotation);
+        Instantiate(PlayerData.Instance.PlayerBullet[PlayerData.Instance.playerSkill[2]], AttackPoint.position, transform.rotation);
+
+        if(PlayerData.Instance.playerSkill[1] > 0)
+        {
+            Invoke("MultiShot", 0.2f);
+        }
+        if(PlayerData.Instance.playerSkill[3] > 0)
+        {
+            Instantiate(PlayerData.Instance.PlayerBullet[PlayerData.Instance.playerSkill[3] - 1], AttackPoint.position, Quaternion.Euler(transform.eulerAngles + new Vector3(0, -45f, 0)));
+            Instantiate(PlayerData.Instance.PlayerBullet[PlayerData.Instance.playerSkill[3] - 1], AttackPoint.position, Quaternion.Euler(transform.eulerAngles + new Vector3(0, 45f, 0)));
+        }
+    }
+
+    void MultiShot()
+    {
+        Instantiate(PlayerData.Instance.PlayerBullet[PlayerData.Instance.playerSkill[2]], AttackPoint.position, transform.rotation);
+        
+        if (PlayerData.Instance.playerSkill[3] > 0)
+        {
+            Instantiate(PlayerData.Instance.PlayerBullet[PlayerData.Instance.playerSkill[3] - 1], AttackPoint.position, Quaternion.Euler(transform.eulerAngles + new Vector3(0, -45f, 0)));
+            Instantiate(PlayerData.Instance.PlayerBullet[PlayerData.Instance.playerSkill[3] - 1], AttackPoint.position, Quaternion.Euler(transform.eulerAngles + new Vector3(0, 45f, 0)));
+        }
     }
 
     private void OnDrawGizmos()

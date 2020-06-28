@@ -65,13 +65,24 @@ public class EnemyOne : EnemyMeleeFSM
         }
     }
 
-    private void OnCollisionEnter(Collision collision)
+    //private void OnCollisionEnter(Collision collision)
+    //{
+    //    if (collision.transform.CompareTag("Arrow"))
+    //    {
+    //        enemyCanvasGo.GetComponent<EnemyHpBar>().Dmg();
+    //        currentHp -= 300f;
+    //        Instantiate(EffectSet.Instance.OneDmgEffect, collision.contacts[0].point, Quaternion.Euler(90, 0, 0));
+    //    }
+    //}
+
+    private void OnTriggerEnter(Collider other)
     {
-        if (collision.transform.CompareTag("Arrow"))
+        if (other.transform.CompareTag("Arrow"))
         {
             enemyCanvasGo.GetComponent<EnemyHpBar>().Dmg();
-            currentHp -= 300f;
-            Instantiate(EffectSet.Instance.OneDmgEffect, collision.contacts[0].point, Quaternion.Euler(90, 0, 0));
+            currentHp -= other.gameObject.GetComponent<Bullet>().damage;
+            Instantiate(EffectSet.Instance.OneDmgEffect, other.transform.position, Quaternion.Euler(90, 0, 0));
+            Destroy(other.gameObject);
         }
     }
 }

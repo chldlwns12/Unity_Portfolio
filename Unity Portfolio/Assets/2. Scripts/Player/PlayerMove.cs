@@ -50,11 +50,11 @@ public class PlayerMove : MonoBehaviour
             StageMgr.Instance.NextStage();
         }
 
-        if (other.transform.CompareTag("HpBooster"))
-        {
-            HpBar.Instance.GetHpBoost();
-            Destroy(other.gameObject);
-        }
+        //if (other.transform.CompareTag("HpBooster"))
+        //{
+        //    HpBar.Instance.GetHpBoost();
+        //    Destroy(other.gameObject);
+        //}
 
         if (other.transform.CompareTag("MeleeAtk"))
         {

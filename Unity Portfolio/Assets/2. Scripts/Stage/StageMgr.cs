@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class StageMgr : MonoBehaviour
 {
+    public GameObject Player;
+    public GameObject openPotal;
+    public GameObject closePotal;
     public static StageMgr Instance
     {
         get
@@ -22,7 +25,6 @@ public class StageMgr : MonoBehaviour
     }
     private static StageMgr instance;
 
-    public GameObject Player;
 
     [System.Serializable]
     public class StartPositionArray
