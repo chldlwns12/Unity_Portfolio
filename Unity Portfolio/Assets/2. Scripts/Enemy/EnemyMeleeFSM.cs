@@ -100,7 +100,7 @@ public class EnemyMeleeFSM : EnemyBase
     {
         yield return null;
         //Move
-        //if (!Anim.GetCurrentAnimatorStateInfo(0).IsName("walk"))
+        //if (!Anim.GetCurrentAnimatorStateInfo(0).IsName("Walk"))
         //{
         //    Anim.SetTrigger("Walk");
         //}

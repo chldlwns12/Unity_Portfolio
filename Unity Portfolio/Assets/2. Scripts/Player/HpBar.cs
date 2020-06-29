@@ -5,15 +5,16 @@ using UnityEngine.UI;
 
 public class HpBar : MonoBehaviour
 {
-    public GameObject Player;
+    public GameObject player;
     public Slider hpBar;
-    public float maxHp = 1000f;
-    public float currentHp = 1000f;
+    public Slider hpBarBack;
 
     public GameObject HpLineFolder;
     float unitHp = 200f;
 
     public Text playerHpText;
+
+    bool backHpHit = false;
 
     public static HpBar Instance
     {
@@ -35,21 +36,42 @@ public class HpBar : MonoBehaviour
 
     void Update()
     {
-        transform.position = Player.transform.position;
-        hpBar.value = currentHp / maxHp;
-        playerHpText.text = "" + currentHp;
+        transform.position = player.transform.position;
+        hpBar.value = Mathf.Lerp(hpBar.value, PlayerData.Instance.currentHp / PlayerData.Instance.maxHp, Time.deltaTime * 5f);
+
+        if (backHpHit)
+        {
+            hpBarBack.value = Mathf.Lerp(hpBarBack.value, hpBar.value, Time.deltaTime * 10f);
+            if (hpBar.value >= hpBarBack.value - 0.01f)
+            {
+                backHpHit = false;
+                hpBarBack.value = hpBar.value;
+            }
+        }
+        playerHpText.text = "" + PlayerData.Instance.currentHp;
     }
 
-    public void GetHpBoost()
+    public void Dmg()
     {
-        maxHp += 210f;
-        currentHp += 210f;
-        float scaleX = (1000f / unitHp) / (maxHp / unitHp);
-        HpLineFolder.GetComponent<HorizontalLayoutGroup>().gameObject.SetActive(false);
-        foreach (Transform child in HpLineFolder.transform)
-        {
-            child.gameObject.transform.localScale = new Vector3(scaleX, 1, 1);
-        }
-        HpLineFolder.GetComponent<HorizontalLayoutGroup>().gameObject.SetActive(true);
+        StartCoroutine(Dameged());
     }
+
+    IEnumerator Dameged()
+    {
+        yield return new WaitForSeconds(0.5f);
+        backHpHit = true;
+    }
+
+    //public void GetHpBoost()
+    //{
+    //    maxHp += 210f;
+    //    currentHp += 210f;
+    //    float scaleX = (1000f / unitHp) / (maxHp / unitHp);
+    //    HpLineFolder.GetComponent<HorizontalLayoutGroup>().gameObject.SetActive(false);
+    //    foreach (Transform child in HpLineFolder.transform)
+    //    {
+    //        child.gameObject.transform.localScale = new Vector3(scaleX, 1, 1);
+    //    }
+    //    HpLineFolder.GetComponent<HorizontalLayoutGroup>().gameObject.SetActive(true);
+    //}
 }

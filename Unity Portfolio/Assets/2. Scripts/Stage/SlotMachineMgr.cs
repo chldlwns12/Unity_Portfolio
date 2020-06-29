@@ -25,7 +25,7 @@ public class SlotMachineMgr : MonoBehaviour
 
     int[] answer = { 2, 3, 1 };
 
-    void Start()
+    void OnEnable()
     {
         for (int i = 0; i < itemCount * slot.Length; i++)
         {
@@ -52,9 +52,6 @@ public class SlotMachineMgr : MonoBehaviour
                 startList.RemoveAt(randomIndex);
             }
         }
-        //StartCoroutine(StartSlot1());
-        //StartCoroutine(StartSlot2());
-        //StartCoroutine(StartSlot3());
 
         for (int i = 0; i < slot.Length; i++)
         {
@@ -71,7 +68,7 @@ public class SlotMachineMgr : MonoBehaviour
             {
                 slotSkillObject[slotIndex].transform.localPosition += new Vector3(0, 300f, 0);
             }
-            yield return null;
+            yield return new WaitForSeconds(0.02f);
         }
         for (int i = 0; i < itemCount; i++)
         {
@@ -81,7 +78,8 @@ public class SlotMachineMgr : MonoBehaviour
 
     public void OnClickButton(int index)
     {
-        displayResultImage.sprite = skillSprite[resultIndexList[index]];
-        gameObject.SetActive(false);
+        UIController.Instance.PlayerLvUp(false);
+        //displayResultImage.sprite = skillSprite[resultIndexList[index]];
+        //gameObject.SetActive(false);
     }
 }

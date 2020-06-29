@@ -25,7 +25,7 @@ public class EnemyTwoBolt : MonoBehaviour
         if(collision.transform.CompareTag("Player"))
         {
             Destroy(gameObject, 0.1f);
-            HpBar.Instance.currentHp -= damage;
+            PlayerData.Instance.currentHp -= damage;
 
             if (!PlayerMove.Instance.Anim.GetCurrentAnimatorStateInfo(0).IsName("Dmg"))
             {

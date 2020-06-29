@@ -8,6 +8,7 @@ public class PlayerMove : MonoBehaviour
     Rigidbody rb;
     public float playerSpeed = 5.0f;
     public Animator Anim;
+    public GameObject playerCavasGO;
 
     public static PlayerMove Instance
     {
@@ -58,9 +59,45 @@ public class PlayerMove : MonoBehaviour
 
         if (other.transform.CompareTag("MeleeAtk"))
         {
+            playerCavasGO.gameObject.GetComponent<HpBar>().Dmg();
             other.transform.parent.GetComponent<EnemyOne>().meleeAtkArea.SetActive(false);
-            HpBar.Instance.currentHp -= other.transform.parent.GetComponent<EnemyOne>().damage * 2f;
+            PlayerData.Instance.currentHp -= other.transform.parent.GetComponent<EnemyOne>().damage * 2f;
         
+            if (!Anim.GetCurrentAnimatorStateInfo(0).IsName("Dmg"))
+            {
+                Anim.SetTrigger("Dmg");
+                Instantiate(EffectSet.Instance.PlayerDmgEffect, PlayerTargeting.Instance.AttackPoint.position, Quaternion.Euler(90, 0, 0));
+            }
+        }
+
+        if(other.transform.CompareTag("BossMeleeAtk"))
+        {
+            HpBar.Instance.Dmg();
+            PlayerData.Instance.currentHp -= other.transform.parent.GetComponent<EnemyStageBoss>().damage * 2f;
+
+            if (!Anim.GetCurrentAnimatorStateInfo(0).IsName("Dmg"))
+            {
+                Anim.SetTrigger("Dmg");
+                Instantiate(EffectSet.Instance.PlayerDmgEffect, PlayerTargeting.Instance.AttackPoint.position, Quaternion.Euler(90, 0, 0));
+            }
+        }
+
+        if(PlayerTargeting.Instance.monsterList.Count <= 0 && other.transform.CompareTag("Exp"))
+        {
+            PlayerData.Instance.PlayerExpCalc(100f);
+            Destroy(other.gameObject.transform.parent.gameObject);
+        }
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if(collision.transform.CompareTag("RangeAtk"))
+        {
+            Destroy(collision.gameObject, 0.1f);
+
+            HpBar.Instance.Dmg();
+            PlayerData.Instance.currentHp -= collision.transform.GetComponent<BossBullet>().damage;
+
             if (!Anim.GetCurrentAnimatorStateInfo(0).IsName("Dmg"))
             {
                 Anim.SetTrigger("Dmg");

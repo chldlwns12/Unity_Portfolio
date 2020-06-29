@@ -46,6 +46,8 @@ public class StageMgr : MonoBehaviour
     public int currentStage = 0;
     int LastStage = 20;
 
+    public bool clear = false;
+
     void Start()
     {
         Player = GameObject.FindGameObjectWithTag("Player");
@@ -54,8 +56,12 @@ public class StageMgr : MonoBehaviour
     public void NextStage()
     {
         currentStage++;
-        if (currentStage > LastStage) return;
-
+        if (currentStage > LastStage)
+        {
+            clear = true;
+            UIController.Instance.EndGame();
+            return;
+        }
         if(currentStage % 5 != 0)   //Normal State
         {
             int arrayIndex = currentStage / 10;
@@ -72,7 +78,8 @@ public class StageMgr : MonoBehaviour
             }
             else    //Boss
             {
-                if(currentStage == LastStage)   //LastBoss
+                UIController.Instance.CheckBossRoom(true);
+                if (currentStage == LastStage)   //LastBoss
                 {
                     Player.transform.position = StartPositionLastBoss.position;
                 }

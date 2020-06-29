@@ -19,6 +19,12 @@ public class PlayerTargeting : MonoBehaviour
     //public GameObject playerBolt;
     public Transform AttackPoint;
 
+    //오브젝트 풀링
+    public Queue<GameObject> arrowPool;
+    public Queue<GameObject> doubleArrowPool;
+    int poolSize = 20;
+    int fireIndex = 0;
+
     public float atkSpeed = 1.0f;
 
     public static PlayerTargeting Instance
@@ -38,6 +44,30 @@ public class PlayerTargeting : MonoBehaviour
         }
     }
     private static PlayerTargeting instance;
+
+    private void Start()
+    {
+        //오브젝트 풀링 초기화
+        InitObjectPooling();
+    }
+
+    private void InitObjectPooling()
+    {
+        arrowPool = new Queue<GameObject>();
+        for (int i = 0; i < poolSize; i++)
+        {
+            GameObject arrow = Instantiate(PlayerData.Instance.PlayerBullet[0]);
+            arrow.SetActive(false);
+            arrowPool.Enqueue(arrow);
+        }
+        doubleArrowPool = new Queue<GameObject>();
+        for (int i = 0; i < poolSize; i++)
+        {
+            GameObject doubleArrow = Instantiate(PlayerData.Instance.PlayerBullet[1]);
+            doubleArrow.SetActive(false);
+            doubleArrowPool.Enqueue(doubleArrow);
+        }
+    }
 
     void Update()
     {
@@ -129,9 +159,24 @@ public class PlayerTargeting : MonoBehaviour
     void Attack()
     {
         PlayerMove.Instance.Anim.SetFloat("AttackSpeed", atkSpeed);
-        Instantiate(PlayerData.Instance.PlayerBullet[PlayerData.Instance.playerSkill[2]], AttackPoint.position, transform.rotation);
+        //Instantiate(PlayerData.Instance.PlayerBullet[PlayerData.Instance.playerSkill[2]], AttackPoint.position, transform.rotation);
+        if (arrowPool.Count > 0)
+        {
+            GameObject bullet = arrowPool.Dequeue();
+            bullet.SetActive(true);
+            bullet.transform.position = AttackPoint.transform.position;
+            bullet.transform.forward = AttackPoint.transform.forward;
+        }
+        else
+        {
+            //총알 오브젝트 생성한다
+            GameObject bullet = Instantiate(PlayerData.Instance.PlayerBullet[PlayerData.Instance.playerSkill[2]]);
+            bullet.SetActive(false);
+            //생성된 총알 오브젝트를 풀에 담는다.
+            arrowPool.Enqueue(bullet);
+        }
 
-        if(PlayerData.Instance.playerSkill[1] > 0)
+        if (PlayerData.Instance.playerSkill[1] > 0)
         {
             Invoke("MultiShot", 0.2f);
         }
@@ -144,8 +189,23 @@ public class PlayerTargeting : MonoBehaviour
 
     void MultiShot()
     {
-        Instantiate(PlayerData.Instance.PlayerBullet[PlayerData.Instance.playerSkill[2]], AttackPoint.position, transform.rotation);
-        
+        //Instantiate(PlayerData.Instance.PlayerBullet[PlayerData.Instance.playerSkill[2]], AttackPoint.position, transform.rotation);
+        if (arrowPool.Count > 0)
+        {
+            GameObject bullet = arrowPool.Dequeue();
+            bullet.SetActive(true);
+            bullet.transform.position = AttackPoint.transform.position;
+            bullet.transform.forward = AttackPoint.transform.forward;
+        }
+        else
+        {
+            //총알 오브젝트 생성한다
+            GameObject bullet = Instantiate(PlayerData.Instance.PlayerBullet[PlayerData.Instance.playerSkill[2]]);
+            bullet.SetActive(false);
+            //생성된 총알 오브젝트를 풀에 담는다.
+            arrowPool.Enqueue(bullet);
+        }
+
         if (PlayerData.Instance.playerSkill[3] > 0)
         {
             Instantiate(PlayerData.Instance.PlayerBullet[PlayerData.Instance.playerSkill[3] - 1], AttackPoint.position, Quaternion.Euler(transform.eulerAngles + new Vector3(0, -45f, 0)));

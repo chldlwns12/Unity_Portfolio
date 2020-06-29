@@ -60,6 +60,15 @@ public class EnemyOne : EnemyMeleeFSM
             rb.gameObject.SetActive(false);
             PlayerTargeting.Instance.monsterList.Remove(transform.parent.gameObject);
             PlayerTargeting.Instance.targetIndex = -1;
+
+            Vector3 currentPosition = new Vector3(transform.position.x, 3f, transform.position.z);
+            for (int i = 0; i < (StageMgr.Instance.currentStage / 10 + 2 + Random.Range(0,3)); i++)
+            {
+                Debug.Log(i);
+                GameObject ExpClone = Instantiate(PlayerData.Instance.itemExp, currentPosition, transform.rotation);
+                ExpClone.transform.parent = gameObject.transform.parent.parent;
+            }
+
             Destroy(transform.parent.gameObject);
             return;
         }
@@ -80,8 +89,21 @@ public class EnemyOne : EnemyMeleeFSM
         if (other.transform.CompareTag("Arrow"))
         {
             enemyCanvasGo.GetComponent<EnemyHpBar>().Dmg();
-            currentHp -= other.gameObject.GetComponent<Bullet>().damage;
             Instantiate(EffectSet.Instance.OneDmgEffect, other.transform.position, Quaternion.Euler(90, 0, 0));
+
+            GameObject dmgTextColone = Instantiate(EffectSet.Instance.MonsterDmgText, transform.position, Quaternion.identity);
+
+            if(Random.value < 0.5)
+            {
+                currentHp -= other.gameObject.GetComponent<Bullet>().damage;
+                dmgTextColone.GetComponent<DmgTxt>().DisplayDamage(other.gameObject.GetComponent<Bullet>().damage, false);
+            }
+            else
+            {
+                currentHp -= other.gameObject.GetComponent<Bullet>().damage * 2;
+                dmgTextColone.GetComponent<DmgTxt>().DisplayDamage(other.gameObject.GetComponent<Bullet>().damage * 2, true);
+            }
+
             Destroy(other.gameObject);
         }
     }
