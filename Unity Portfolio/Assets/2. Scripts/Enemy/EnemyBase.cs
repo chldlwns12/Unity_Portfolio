@@ -15,9 +15,9 @@ public class EnemyBase : MonoBehaviour
     protected float attackCoolTimeCacl = 5f;
     protected bool canAtk = true;
 
-    protected float moveSpeed = 2f;
+    protected float moveSpeed = 0f;
 
-    protected GameObject Player;
+    protected GameObject player;
     protected NavMeshAgent nvAgent;
     protected float distance;
 
@@ -31,9 +31,9 @@ public class EnemyBase : MonoBehaviour
     // Use this for initialization
     protected void Start()
     {
-        Player = GameObject.FindGameObjectWithTag("Player");
-        //Debug.Log("Player : " + Player);
-        //Debug.Log("Player.transform.position : " + Player.transform.position);
+        player = GameObject.FindGameObjectWithTag("Player");
+        //Debug.Log("player : " + player);
+        //Debug.Log("player.transform.position : " + player.transform.position);
 
         nvAgent = GetComponent<NavMeshAgent>();
         rb = GetComponent<Rigidbody>();
@@ -46,10 +46,10 @@ public class EnemyBase : MonoBehaviour
 
     protected bool CanAtkStateFun()
     {
-        Vector3 targetDir = new Vector3(Player.transform.position.x - transform.position.x, 0f, Player.transform.position.z - transform.position.z);
+        Vector3 targetDir = new Vector3(player.transform.position.x - transform.position.x, 0f, player.transform.position.z - transform.position.z);
 
         Physics.Raycast(new Vector3(transform.position.x, 0.5f, transform.position.z), targetDir, out RaycastHit hit, 30f, layerMask);
-        distance = Vector3.Distance(Player.transform.position, transform.position);
+        distance = Vector3.Distance(player.transform.position, transform.position);
 
         if (hit.transform == null)
         {
@@ -59,6 +59,7 @@ public class EnemyBase : MonoBehaviour
 
         if (hit.transform.CompareTag("Player") && distance <= attackRange)
         {
+            Debug.Log("Name : " + transform.gameObject.name);
             return true;
         }
         else

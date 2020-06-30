@@ -34,6 +34,14 @@ public class PlayerMove : MonoBehaviour
         Anim = GetComponent<Animator>();
     }
 
+    private void Update()
+    {
+        if(Input.GetKeyDown(KeyCode.A))
+        {
+            PlayerTargeting.Instance.Attack();
+        }
+    }
+
     private void FixedUpdate()
     {
         if (JoyStickMove.Instance.joyVec.x != 0 || JoyStickMove.Instance.joyVec.z != 0)

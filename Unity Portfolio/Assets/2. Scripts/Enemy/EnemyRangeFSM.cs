@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using UnityEngine;
 
-public class EnemyMeleeFSM : EnemyBase
+public class EnemyRangeFSM : EnemyBase
 {
     public enum State
     {
@@ -20,7 +20,7 @@ public class EnemyMeleeFSM : EnemyBase
     {
         base.Start();
         parentRoom = transform.parent.transform.parent.gameObject;
-        //Debug.Log("Start - State :" + currentState.ToString());
+        Debug.Log("Start - State :" + currentState.ToString());
 
         StartCoroutine(FSM());
     }
@@ -75,14 +75,12 @@ public class EnemyMeleeFSM : EnemyBase
     {
         yield return null;
         //Atk
-
-        nvAgent.stoppingDistance = 0f;
+        nvAgent.speed = moveSpeed;
+        nvAgent.stoppingDistance = attackRange;
         nvAgent.isStopped = true;
         nvAgent.SetDestination(player.transform.position);
         yield return Delay500;
 
-        nvAgent.isStopped = false;
-        nvAgent.speed = 0f;
         canAtk = false;
 
         if (!Anim.GetCurrentAnimatorStateInfo(0).IsName("Attack"))
@@ -91,10 +89,7 @@ public class EnemyMeleeFSM : EnemyBase
         }
         AtkEffect();
         yield return Delay500;
-
-        nvAgent.speed = moveSpeed;
-        nvAgent.stoppingDistance = attackRange;
-        currentState = State.Idle;
+        currentState = State.Move;
     }
 
     protected virtual IEnumerator Move()

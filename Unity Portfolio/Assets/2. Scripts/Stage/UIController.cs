@@ -45,8 +45,8 @@ public class UIController : MonoBehaviour
 
     void Start()
     {
-        Debug.Log("playerExp : " + PlayerData.Instance.playerCurrentExp);
-        Debug.Log("playerMaxExp : " + PlayerData.Instance.playerLvUpExp);
+        //Debug.Log("playerExp : " + PlayerData.Instance.playerCurrentExp);
+        //Debug.Log("playerMaxExp : " + PlayerData.Instance.playerLvUpExp);
         playerExpBar.value = PlayerData.Instance.playerCurrentExp / PlayerData.Instance.playerLvUpExp;
         playerExpBar.gameObject.SetActive(true);
         bossHpBar.gameObject.SetActive(false);

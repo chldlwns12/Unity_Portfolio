@@ -15,7 +15,7 @@ public class Bullet : MonoBehaviour
         //GetComponent<Rigidbody>().velocity = transform.forward * 20f;
         rb = GetComponent<Rigidbody>();
         newDir = transform.forward;
-        rb.velocity = newDir * 20f;
+        rb.velocity = newDir * 5f;
 
         damage = PlayerData.Instance.damage;
 
@@ -32,16 +32,20 @@ public class Bullet : MonoBehaviour
         {
             if (i == index) continue;
 
-            currentDis = Vector3.Distance(PlayerTargeting.Instance.monsterList[i].transform.position, transform.position);
+            currentDis = Vector3.Distance(PlayerTargeting.Instance.monsterList[i].transform.GetChild(0).position, transform.position);
 
             if (currentDis > 5f) continue;
 
-            Debug.Log("currentDis : " + currentDis);
-            Debug.Log("closetDis : " + closetDis);
+            //Debug.Log("currentDis : " + currentDis);
+            //Debug.Log("closetDis : " + closetDis);
+                Debug.Log("i : " + i);
             if(closetDis > currentDis)
             {
+                Collider[] cols = Physics.OverlapSphere(transform.position, 5f);
                 closetDis = currentDis;
                 closetIndex = i;
+                Debug.Log("반동!");
+                Debug.Log("closetIndex : " + closetIndex);
             }
         }
 
@@ -50,25 +54,28 @@ public class Bullet : MonoBehaviour
             Destroy(gameObject, 0.2f);
             return Vector3.zero;
         }
-        Debug.Log("Name : " + PlayerTargeting.Instance.monsterList[closetIndex].name);
+        Debug.Log("ResultName : " + PlayerTargeting.Instance.monsterList[closetIndex].name);
+        //transform.LookAt(PlayerTargeting.Instance.monsterList[closetIndex].transform.position);
         return (PlayerTargeting.Instance.monsterList[closetIndex].transform.position - transform.position).normalized;
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        if(other.transform.CompareTag("Monster") && rb != null)
+        if(other.transform.CompareTag("Monster"))
         {
             if(PlayerData.Instance.playerSkill[0] != 0 && PlayerTargeting.Instance.monsterList.Count >= 2)
             {
-                int myIndex = PlayerTargeting.Instance.monsterList.IndexOf(other.gameObject);
+                int myIndex = PlayerTargeting.Instance.monsterList.IndexOf(other.gameObject.transform.parent.gameObject);
 
                 if(bounceCount > 0)
                 {
                     bounceCount--;
                     damage *= 0.7f;
-                    newDir = ResultDir(myIndex) * 20f;
+                    Debug.Log("myIndex : " + myIndex);
+                    newDir = ResultDir(myIndex) ;
+                
                     transform.rotation = Quaternion.LookRotation(newDir);
-                    rb.velocity = newDir;
+                    rb.velocity = transform.forward * 5f;
                     return;
                 }
             }
@@ -97,7 +104,7 @@ public class Bullet : MonoBehaviour
                     damage *= 0.5f;
                     newDir = Vector3.Reflect(newDir, collision.contacts[0].normal);
                     transform.rotation = Quaternion.LookRotation(newDir);
-                    rb.velocity = newDir * 20f;
+                    rb.velocity = newDir * 5f;
                     return;
                 }
             }

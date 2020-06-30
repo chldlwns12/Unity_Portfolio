@@ -35,7 +35,7 @@ public class EnemyStageBoss : EnemyMeleeFSM
     {
         yield return null;
         nvAgent.isStopped = true;
-        transform.LookAt(Player.transform.position);
+        transform.LookAt(player.transform.position);
 
         if(Random.value < 0.6)
         {
@@ -62,7 +62,7 @@ public class EnemyStageBoss : EnemyMeleeFSM
                 Debug.Log("GetHit!");
                 Anim.SetTrigger("GetHit");
             }
-            transform.LookAt(Player.transform.position);
+            transform.LookAt(player.transform.position);
             Physics.Raycast(new Vector3(transform.position.x, 0.5f, transform.position.z), transform.forward, out RaycastHit hit, 60f, layerMaskWall);
             Vector3 targetPoint = hit.point;
 

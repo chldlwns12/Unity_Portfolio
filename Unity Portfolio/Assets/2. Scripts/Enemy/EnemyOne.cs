@@ -64,7 +64,7 @@ public class EnemyOne : EnemyMeleeFSM
             Vector3 currentPosition = new Vector3(transform.position.x, 3f, transform.position.z);
             for (int i = 0; i < (StageMgr.Instance.currentStage / 10 + 2 + Random.Range(0,3)); i++)
             {
-                Debug.Log(i);
+                //Debug.Log(i);
                 GameObject ExpClone = Instantiate(PlayerData.Instance.itemExp, currentPosition, transform.rotation);
                 ExpClone.transform.parent = gameObject.transform.parent.parent;
             }
@@ -73,16 +73,6 @@ public class EnemyOne : EnemyMeleeFSM
             return;
         }
     }
-
-    //private void OnCollisionEnter(Collision collision)
-    //{
-    //    if (collision.transform.CompareTag("Arrow"))
-    //    {
-    //        enemyCanvasGo.GetComponent<EnemyHpBar>().Dmg();
-    //        currentHp -= 300f;
-    //        Instantiate(EffectSet.Instance.OneDmgEffect, collision.contacts[0].point, Quaternion.Euler(90, 0, 0));
-    //    }
-    //}
 
     private void OnTriggerEnter(Collider other)
     {
@@ -104,7 +94,7 @@ public class EnemyOne : EnemyMeleeFSM
                 dmgTextColone.GetComponent<DmgTxt>().DisplayDamage(other.gameObject.GetComponent<Bullet>().damage * 2, true);
             }
 
-            Destroy(other.gameObject);
+            //Destroy(other.gameObject);
         }
     }
 }
