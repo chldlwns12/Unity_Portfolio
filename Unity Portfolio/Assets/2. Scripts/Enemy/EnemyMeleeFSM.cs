@@ -65,6 +65,7 @@ public class EnemyMeleeFSM : EnemyBase
         }
         else
         {
+            nvAgent.isStopped = false;
             currentState = State.Move;
         }
     }
@@ -107,6 +108,7 @@ public class EnemyMeleeFSM : EnemyBase
         }
         if (CanAtkStateFun() && canAtk)
         {
+            Debug.Log("FSM Attack!");
             currentState = State.Attack;
         }
         else if (distance > playerRealizeRange)

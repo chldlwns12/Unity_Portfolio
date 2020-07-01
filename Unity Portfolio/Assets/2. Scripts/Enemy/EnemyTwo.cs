@@ -18,18 +18,27 @@ public class EnemyTwo : EnemyMeleeFSM
 
     public GameObject enemyCanvasGo;
 
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawWireSphere(transform.position, playerRealizeRange);
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(transform.position, attackRange);
+    }
+
     protected void Start()
     {
         base.Start();
         roomConditionGO = transform.parent.transform.parent.gameObject.GetComponent<RoomCondition>();
         enemyAnim = GetComponent<Animator>();
 
-        attackCoolTime = 2.0f;
+        attackCoolTime = 5.0f;
         attackCoolTimeCacl = attackCoolTime;
 
         playerRealizeRange = 10f;
         attackRange = 10f;
         moveSpeed = 1f;
+        StartCoroutine(Idle());
     }
 
     void Update()
@@ -60,14 +69,17 @@ public class EnemyTwo : EnemyMeleeFSM
         maxHp += (StageMgr.Instance.currentStage + 1) * 100f;
         currentHp = maxHp;
         damage += (StageMgr.Instance.currentStage + 1) * 10f;
-        StartCoroutine(Idle());
     }
 
     protected override IEnumerator Attack()
     {
+        if (!Anim.GetCurrentAnimatorStateInfo(0).IsName("Idle"))
+        {
+            Anim.SetTrigger("Idle");
+        }
+        Debug.Log("Two Attack!");
         yield return null;
         //Atk
-        nvAgent.speed = moveSpeed;
         nvAgent.stoppingDistance = attackRange;
         nvAgent.isStopped = true;
         transform.LookAt(player.transform.position);
@@ -81,8 +93,36 @@ public class EnemyTwo : EnemyMeleeFSM
         {
             Anim.SetTrigger("Attack");
         }
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(1.5f);
         currentState = State.Move;
+        transform.Rotate(new Vector3(0, Random.Range(0f, 200f), 0));
+    }
+
+    protected override IEnumerator Move()
+    {
+        yield return null;
+        //Move
+        nvAgent.isStopped = false;
+        if (!Anim.GetCurrentAnimatorStateInfo(0).IsName("Walk"))
+        {
+            Debug.Log("Walk!");
+            Anim.SetTrigger("Walk");
+        }
+
+        if (distance > attackRange && canAtk)
+        {
+            Debug.Log("FSM Attack!");
+            currentState = State.Attack;
+        }
+        else
+        {
+            Debug.Log("Move forward");
+            transform.Translate(Vector3.forward * moveSpeed * Time.deltaTime);
+        }
+
+        Debug.Log("state : " + currentState);
+        Debug.Log("Distance : " + distance);
+        Debug.Log("canAtk : " + canAtk);
     }
 
     private void DangerMaKerShoot()
@@ -99,7 +139,6 @@ public class EnemyTwo : EnemyMeleeFSM
 
     private void Shoot()
     {
-        enemyAnim.SetTrigger("Attack");
         Vector3 CurrentRotation = transform.eulerAngles + new Vector3(-90, 0, 0);
         Instantiate(enemyBolt, boltGenPosition.position, Quaternion.Euler(CurrentRotation));
     }
@@ -125,6 +164,24 @@ public class EnemyTwo : EnemyMeleeFSM
             }
 
             //Destroy(other.gameObject);
+        }
+    }
+
+    protected override IEnumerator CalcCoolTime()
+    {
+        while (true)
+        {
+            yield return null;
+            if (!canAtk)
+            {
+                Debug.Log("CoolTime");
+                attackCoolTimeCacl -= Time.deltaTime;
+                if (attackCoolTimeCacl <= 0)
+                {
+                    attackCoolTimeCacl = attackCoolTime;
+                    canAtk = true;
+                }
+            }
         }
     }
 }

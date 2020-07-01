@@ -78,6 +78,7 @@ public class EnemyBase : MonoBehaviour
                 attackCoolTimeCacl -= Time.deltaTime;
                 if (attackCoolTimeCacl <= 0)
                 {
+                    Debug.Log("canAtk : " + attackCoolTimeCacl);
                     attackCoolTimeCacl = attackCoolTime;
                     canAtk = true;
                 }

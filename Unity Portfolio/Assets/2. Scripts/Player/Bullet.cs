@@ -44,8 +44,8 @@ public class Bullet : MonoBehaviour
                 Collider[] cols = Physics.OverlapSphere(transform.position, 5f);
                 closetDis = currentDis;
                 closetIndex = i;
-                Debug.Log("반동!");
-                Debug.Log("closetIndex : " + closetIndex);
+                //Debug.Log("반동!");
+                //Debug.Log("closetIndex : " + closetIndex);
             }
         }
 
@@ -54,7 +54,7 @@ public class Bullet : MonoBehaviour
             Destroy(gameObject, 0.2f);
             return Vector3.zero;
         }
-        Debug.Log("ResultName : " + PlayerTargeting.Instance.monsterList[closetIndex].name);
+        //Debug.Log("ResultName : " + PlayerTargeting.Instance.monsterList[closetIndex].name);
         //transform.LookAt(PlayerTargeting.Instance.monsterList[closetIndex].transform.position);
         return (PlayerTargeting.Instance.monsterList[closetIndex].transform.position - transform.position).normalized;
     }
@@ -71,7 +71,7 @@ public class Bullet : MonoBehaviour
                 {
                     bounceCount--;
                     damage *= 0.7f;
-                    Debug.Log("myIndex : " + myIndex);
+                    //Debug.Log("myIndex : " + myIndex);
                     newDir = ResultDir(myIndex) ;
                 
                     transform.rotation = Quaternion.LookRotation(newDir);

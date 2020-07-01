@@ -12,13 +12,6 @@ public class EnemyHpBar : MonoBehaviour
     public float currentHp = 1000f;
     bool backHpHit = false;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
     void Update()
     {
         transform.position = Enemy.transform.position;
