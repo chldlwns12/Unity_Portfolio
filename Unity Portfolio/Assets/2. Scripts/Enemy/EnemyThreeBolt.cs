@@ -42,16 +42,16 @@ public class EnemyThreeBolt : MonoBehaviour
                 Destroy(gameObject, 0.1f);
             }
         }
-        if (collision.transform.CompareTag("Player"))
-        {
-            Destroy(gameObject, 0.1f);
-            PlayerData.Instance.currentHp -= damage;
-
-            if (!PlayerMove.Instance.Anim.GetCurrentAnimatorStateInfo(0).IsName("Dmg"))
-            {
-                PlayerMove.Instance.Anim.SetTrigger("Dmg");
-                Instantiate(EffectSet.Instance.PlayerDmgEffect, PlayerTargeting.Instance.AttackPoint.position, Quaternion.Euler(90, 0, 0));
-            }
-        }
+        //if (collision.transform.CompareTag("Player"))
+        //{
+        //    Destroy(gameObject, 0.1f);
+        //    PlayerData.Instance.currentHp -= damage;
+        //
+        //    if (!PlayerMove.Instance.Anim.GetCurrentAnimatorStateInfo(0).IsName("Dmg"))
+        //    {
+        //        PlayerMove.Instance.Anim.SetTrigger("Dmg");
+        //        Instantiate(EffectSet.Instance.PlayerDmgEffect, PlayerTargeting.Instance.AttackPoint.position, Quaternion.Euler(90, 0, 0));
+        //    }
+        //}
     }
 }

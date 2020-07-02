@@ -25,8 +25,6 @@ public class PlayerTargeting : MonoBehaviour
     //int poolSize = 20;
     //int fireIndex = 0;
 
-    public float atkSpeed = 1.0f;
-
     public static PlayerTargeting Instance
     {
         get
@@ -158,7 +156,7 @@ public class PlayerTargeting : MonoBehaviour
 
     public void Attack()
     {
-        PlayerMove.Instance.Anim.SetFloat("AttackSpeed", atkSpeed);
+        PlayerMove.Instance.Anim.SetFloat("AttackSpeed", PlayerData.Instance.atkSpeed);
         Instantiate(PlayerData.Instance.PlayerBullet[PlayerData.Instance.playerSkill[2]], AttackPoint.position, transform.rotation);
         //if (arrowPool.Count > 0)
         //{

@@ -15,7 +15,7 @@ public class Bullet : MonoBehaviour
         //GetComponent<Rigidbody>().velocity = transform.forward * 20f;
         rb = GetComponent<Rigidbody>();
         newDir = transform.forward;
-        rb.velocity = newDir * 5f;
+        rb.velocity = newDir * 20f;
 
         damage = PlayerData.Instance.damage;
 
@@ -75,7 +75,7 @@ public class Bullet : MonoBehaviour
                     newDir = ResultDir(myIndex) ;
                 
                     transform.rotation = Quaternion.LookRotation(newDir);
-                    rb.velocity = transform.forward * 5f;
+                    rb.velocity = transform.forward * 20f;
                     return;
                 }
             }
@@ -104,7 +104,7 @@ public class Bullet : MonoBehaviour
                     damage *= 0.5f;
                     newDir = Vector3.Reflect(newDir, collision.contacts[0].normal);
                     transform.rotation = Quaternion.LookRotation(newDir);
-                    rb.velocity = newDir * 5f;
+                    rb.velocity = newDir * 20f;
                     return;
                 }
             }

@@ -6,7 +6,7 @@ using UnityEngine.EventSystems;
 public class PlayerMove : MonoBehaviour
 {
     Rigidbody rb;
-    public float playerSpeed = 5.0f;
+    
     public Animator Anim;
     public GameObject playerCavasGO;
 
@@ -46,7 +46,7 @@ public class PlayerMove : MonoBehaviour
     {
         if (JoyStickMove.Instance.joyVec.x != 0 || JoyStickMove.Instance.joyVec.z != 0)
         {
-            rb.velocity = new Vector3(JoyStickMove.Instance.joyVec.x * playerSpeed, 0, JoyStickMove.Instance.joyVec.y * playerSpeed) * playerSpeed;
+            rb.velocity = new Vector3(JoyStickMove.Instance.joyVec.x * PlayerData.Instance.playerSpeed, 0, JoyStickMove.Instance.joyVec.y * PlayerData.Instance.playerSpeed) * PlayerData.Instance.playerSpeed;
             rb.rotation = Quaternion.LookRotation(new Vector3(JoyStickMove.Instance.joyVec.x, 0, JoyStickMove.Instance.joyVec.y));
         }
     }
@@ -65,7 +65,7 @@ public class PlayerMove : MonoBehaviour
         //    Destroy(other.gameObject);
         //}
 
-        if (other.transform.CompareTag("MeleeAtk"))
+        if (other.transform.CompareTag("MeleeAtk") && PlayerData.Instance.playerImmotal == false)
         {
             playerCavasGO.gameObject.GetComponent<HpBar>().Dmg();
             other.transform.parent.GetComponent<EnemyOne>().meleeAtkArea.SetActive(false);
@@ -78,7 +78,7 @@ public class PlayerMove : MonoBehaviour
             }
         }
 
-        if(other.transform.CompareTag("BossMeleeAtk"))
+        if(other.transform.CompareTag("BossMeleeAtk") && PlayerData.Instance.playerImmotal == false)
         {
             HpBar.Instance.Dmg();
             PlayerData.Instance.currentHp -= other.transform.parent.GetComponent<EnemyStageBoss>().damage * 2f;
@@ -99,7 +99,21 @@ public class PlayerMove : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        if(collision.transform.CompareTag("RangeAtk"))
+        if (collision.transform.CompareTag("RangeAtk") && PlayerData.Instance.playerImmotal == false)
+        {
+            Destroy(collision.gameObject, 0.1f);
+
+            HpBar.Instance.Dmg();
+            PlayerData.Instance.currentHp -= collision.transform.GetComponent<EnemyThreeBolt>().damage;
+
+            if (!Anim.GetCurrentAnimatorStateInfo(0).IsName("Dmg"))
+            {
+                Anim.SetTrigger("Dmg");
+                Instantiate(EffectSet.Instance.PlayerDmgEffect, PlayerTargeting.Instance.AttackPoint.position, Quaternion.Euler(90, 0, 0));
+            }
+        }
+
+        if(collision.transform.CompareTag("BossRangeAtk") && PlayerData.Instance.playerImmotal == false)
         {
             Destroy(collision.gameObject, 0.1f);
 

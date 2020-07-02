@@ -62,16 +62,16 @@ public class HpBar : MonoBehaviour
         backHpHit = true;
     }
 
-    //public void GetHpBoost()
-    //{
-    //    maxHp += 210f;
-    //    currentHp += 210f;
-    //    float scaleX = (1000f / unitHp) / (maxHp / unitHp);
-    //    HpLineFolder.GetComponent<HorizontalLayoutGroup>().gameObject.SetActive(false);
-    //    foreach (Transform child in HpLineFolder.transform)
-    //    {
-    //        child.gameObject.transform.localScale = new Vector3(scaleX, 1, 1);
-    //    }
-    //    HpLineFolder.GetComponent<HorizontalLayoutGroup>().gameObject.SetActive(true);
-    //}
+    public void GetHpBoost()
+    {
+        PlayerData.Instance.maxHp += 210f;
+        PlayerData.Instance.currentHp += 210f;
+        float scaleX = (1000f / unitHp) / (PlayerData.Instance.maxHp / unitHp);
+        HpLineFolder.GetComponent<HorizontalLayoutGroup>().gameObject.SetActive(false);
+        foreach (Transform child in HpLineFolder.transform)
+        {
+            child.gameObject.transform.localScale = new Vector3(scaleX, 1, 1);
+        }
+        HpLineFolder.GetComponent<HorizontalLayoutGroup>().gameObject.SetActive(true);
+    }
 }

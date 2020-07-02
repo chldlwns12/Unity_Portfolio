@@ -5,6 +5,24 @@ using UnityEngine.UI;
 
 public class SlotMachineMgr : MonoBehaviour
 {
+    public static SlotMachineMgr Instance
+    {
+        get
+        {
+            if (instance == null)
+            {
+                instance = FindObjectOfType<SlotMachineMgr>();
+                if (instance == null)
+                {
+                    var instanceContainer = new GameObject("SlotMachineMgr");
+                    instance = instanceContainer.AddComponent<SlotMachineMgr>();
+                }
+            }
+            return instance;
+        }
+    }
+    private static SlotMachineMgr instance;
+
     public GameObject[] slotSkillObject;
     public Button[] slot;
 
@@ -18,6 +36,7 @@ public class SlotMachineMgr : MonoBehaviour
     public DisplayItemSlot[] displayItemSlots;
 
     public Image displayResultImage;
+    
 
     public List<int> startList = new List<int>();
     public List<int> resultIndexList = new List<int>();
@@ -41,13 +60,16 @@ public class SlotMachineMgr : MonoBehaviour
                 int randomIndex = Random.Range(0, startList.Count);
                 if(i == 0 && j == 1 || i == 1 && j == 0 || i == 2 && j == 2)
                 {
-                    resultIndexList.Add(startList[randomIndex]);
+                    resultIndexList.Add(randomIndex);
+                    //resultIndexList.Add(startList[randomIndex]);
                 }
-                displayItemSlots[i].slotSprite[j].sprite = skillSprite[startList[randomIndex]];
+                displayItemSlots[i].slotSprite[j].sprite = skillSprite[randomIndex];
+                //displayItemSlots[i].slotSprite[j].sprite = skillSprite[startList[randomIndex]];
 
                 if(j == 0)
                 {
-                    displayItemSlots[i].slotSprite[itemCount].sprite = skillSprite[startList[randomIndex]];
+                    displayItemSlots[i].slotSprite[itemCount].sprite = skillSprite[randomIndex];
+                    //displayItemSlots[i].slotSprite[itemCount].sprite = skillSprite[startList[randomIndex]];
                 }
                 startList.RemoveAt(randomIndex);
             }
@@ -78,8 +100,10 @@ public class SlotMachineMgr : MonoBehaviour
 
     public void OnClickButton(int index)
     {
+        displayResultImage.sprite = skillSprite[resultIndexList[index]];
+        PlayerData.Instance.resultIndex = resultIndexList[index];
+        PlayerData.Instance.playerSkillUp = true;
         UIController.Instance.PlayerLvUp(false);
-        //displayResultImage.sprite = skillSprite[resultIndexList[index]];
         //gameObject.SetActive(false);
     }
 }

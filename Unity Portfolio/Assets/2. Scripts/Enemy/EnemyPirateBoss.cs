@@ -2,9 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyStageBoss : EnemyMeleeFSM
+public class EnemyPirateBoss : EnemyMeleeFSM
 {
-
     public GameObject bossBullet;
     public Transform attackPoint;
     public LayerMask layerMaskWall;
@@ -26,7 +25,7 @@ public class EnemyStageBoss : EnemyMeleeFSM
 
     protected override void InitMonster()
     {
-        maxHp = 100000f;
+        maxHp = 80000f;
         currentHp = maxHp;
         damage = 300f;
         StartCoroutine(Attack());
@@ -38,18 +37,18 @@ public class EnemyStageBoss : EnemyMeleeFSM
         nvAgent.isStopped = true;
         transform.LookAt(player.transform.position);
 
-        if(Random.value < 0.6)
+        if (Random.value < 0.7)
         {
-            if(Random.value < 0.5)
+            if (Random.value < 0.5)
             {
-                if(!Anim.GetCurrentAnimatorStateInfo(0).IsName("Attack01"))
+                if (!Anim.GetCurrentAnimatorStateInfo(0).IsName("Attack01"))
                 {
                     Anim.SetTrigger("Attack01");
                 }
             }
             else
             {
-                if(!Anim.GetCurrentAnimatorStateInfo(0).IsName("Attack02"))
+                if (!Anim.GetCurrentAnimatorStateInfo(0).IsName("Attack02"))
                 {
                     Anim.SetTrigger("Attack02");
                 }
@@ -58,41 +57,7 @@ public class EnemyStageBoss : EnemyMeleeFSM
         }
         else
         {
-            if(!Anim.GetCurrentAnimatorStateInfo(0).IsName("GetHit"))
-            {
-                Debug.Log("GetHit!");
-                Anim.SetTrigger("GetHit");
-            }
-            transform.LookAt(player.transform.position);
-            Physics.Raycast(new Vector3(transform.position.x, 0.5f, transform.position.z), transform.forward, out RaycastHit hit, 60f, layerMaskWall);
-            Vector3 targetPoint = hit.point;
-
-            yield return Delay500;
-
-            nvAgent.isStopped = false;
-            nvAgent.stoppingDistance = 0f;
-            nvAgent.SetDestination(targetPoint);
-            nvAgent.speed = 200f;
-
-            while (true)
-            {
-                if(Vector3.Distance(nvAgent.destination, transform.position) > 3f)
-                {
-                    if(!Anim.GetCurrentAnimatorStateInfo(0).IsName("Walk"))
-                    {
-                        Anim.SetTrigger("Walk");
-                    }
-                }
-                else
-                {
-                    nvAgent.isStopped = true;
-
-                    break;
-                }
-                yield return null;
-            }
-            nvAgent.speed = moveSpeed;
-            nvAgent.stoppingDistance = attackRange;
+            
         }
         canAtk = false;
         currentState = State.Idle;
@@ -148,7 +113,7 @@ public class EnemyStageBoss : EnemyMeleeFSM
 
     private void OnTriggerEnter(Collider other)
     {
-        if(other.transform.CompareTag("Arrow"))
+        if (other.transform.CompareTag("Arrow"))
         {
             float arrowDmg = other.gameObject.GetComponent<Bullet>().damage;
 
@@ -158,7 +123,7 @@ public class EnemyStageBoss : EnemyMeleeFSM
 
             GameObject damageTextClone = Instantiate(EffectSet.Instance.MonsterDmgText, transform.position, Quaternion.identity);
 
-            if(Random.value < 0.5)
+            if (Random.value < 0.5)
             {
                 currentHp -= arrowDmg;
                 damageTextClone.GetComponent<DmgTxt>().DisplayDamage(arrowDmg, false);
