@@ -6,20 +6,39 @@ public class Bullet : MonoBehaviour
 {
     public int bounceCount = 2;
     public int wallBounceCount = 2;
-    Rigidbody rb;
+    public Rigidbody rb;
     Vector3 newDir;
     public float damage;
+
+    private void OnDisable()
+    {
+        Debug.Log("Bullet Disable");
+    }
 
     void Start()
     {
         //GetComponent<Rigidbody>().velocity = transform.forward * 20f;
         rb = GetComponent<Rigidbody>();
-        newDir = transform.forward;
-        rb.velocity = newDir * 20f;
 
         damage = PlayerData.Instance.damage;
 
-        Destroy(gameObject, 5f);
+        //Destroy(gameObject, 5f);
+        Invoke("PoolingReset", 5f);
+    }
+
+    private void Update()
+    {
+        if(gameObject.activeSelf == true)
+        {
+            newDir = transform.forward;
+            rb.velocity = newDir * 20f;
+        }
+    }
+
+    void PoolingReset()
+    {
+        gameObject.SetActive(false);
+        PlayerTargeting.Instance.ArrowEnqueue(gameObject);
     }
 
     Vector3 ResultDir(int index)
@@ -41,7 +60,6 @@ public class Bullet : MonoBehaviour
                 Debug.Log("i : " + i);
             if(closetDis > currentDis)
             {
-                Collider[] cols = Physics.OverlapSphere(transform.position, 5f);
                 closetDis = currentDis;
                 closetIndex = i;
                 //Debug.Log("반동!");
@@ -51,12 +69,14 @@ public class Bullet : MonoBehaviour
 
         if(closetIndex == -1)
         {
-            Destroy(gameObject, 0.2f);
+            gameObject.SetActive(false);
+            PlayerTargeting.Instance.ArrowEnqueue(gameObject);
+            //Destroy(gameObject, 0.2f);
             return Vector3.zero;
         }
         //Debug.Log("ResultName : " + PlayerTargeting.Instance.monsterList[closetIndex].name);
         //transform.LookAt(PlayerTargeting.Instance.monsterList[closetIndex].transform.position);
-        return (PlayerTargeting.Instance.monsterList[closetIndex].transform.position - transform.position).normalized;
+        return (PlayerTargeting.Instance.monsterList[closetIndex].transform.GetChild(0).position - transform.position).normalized;
     }
 
     private void OnTriggerEnter(Collider other)
@@ -80,14 +100,18 @@ public class Bullet : MonoBehaviour
                 }
             }
             rb.velocity = Vector3.zero;
-            Destroy(gameObject, 0.2f);
+            gameObject.SetActive(false);
+            PlayerTargeting.Instance.ArrowEnqueue(gameObject);
+            //Destroy(gameObject, 0.2f);
         }
         else if(other.transform.CompareTag("Wall") && rb != null)
         {
             if(PlayerData.Instance.playerSkill[4] == 0)
             {
                 rb.velocity = Vector3.zero;
-                Destroy(gameObject, 0.2f);
+                gameObject.SetActive(false);
+                PlayerTargeting.Instance.ArrowEnqueue(gameObject);
+                //Destroy(gameObject, 0.2f);
             }
         }
     }
@@ -109,7 +133,15 @@ public class Bullet : MonoBehaviour
                 }
             }
             rb.velocity = Vector3.zero;
-            Destroy(gameObject);
+            gameObject.SetActive(false);
+            PlayerTargeting.Instance.ArrowEnqueue(gameObject);
+            //Destroy(gameObject);
         }
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawLine(transform.position, transform.position + newDir.normalized * 5f);
     }
 }

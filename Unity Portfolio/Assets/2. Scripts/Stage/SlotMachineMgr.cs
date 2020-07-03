@@ -46,7 +46,8 @@ public class SlotMachineMgr : MonoBehaviour
 
     void OnEnable()
     {
-        for (int i = 0; i < itemCount * slot.Length; i++)
+        //for (int i = 0; i < itemCount * slot.Length; i++)
+        for (int i = 0; i < skillSprite.Length; i++)
         {
             startList.Add(i);
         }
@@ -60,16 +61,16 @@ public class SlotMachineMgr : MonoBehaviour
                 int randomIndex = Random.Range(0, startList.Count);
                 if(i == 0 && j == 1 || i == 1 && j == 0 || i == 2 && j == 2)
                 {
-                    resultIndexList.Add(randomIndex);
-                    //resultIndexList.Add(startList[randomIndex]);
+                    //resultIndexList.Add(randomIndex);
+                    resultIndexList.Add(startList[randomIndex]);
                 }
-                displayItemSlots[i].slotSprite[j].sprite = skillSprite[randomIndex];
-                //displayItemSlots[i].slotSprite[j].sprite = skillSprite[startList[randomIndex]];
+                //displayItemSlots[i].slotSprite[j].sprite = skillSprite[randomIndex];
+                displayItemSlots[i].slotSprite[j].sprite = skillSprite[startList[randomIndex]];
 
                 if(j == 0)
                 {
-                    displayItemSlots[i].slotSprite[itemCount].sprite = skillSprite[randomIndex];
-                    //displayItemSlots[i].slotSprite[itemCount].sprite = skillSprite[startList[randomIndex]];
+                    //displayItemSlots[i].slotSprite[itemCount].sprite = skillSprite[randomIndex];
+                    displayItemSlots[i].slotSprite[itemCount].sprite = skillSprite[startList[randomIndex]];
                 }
                 startList.RemoveAt(randomIndex);
             }
@@ -83,6 +84,7 @@ public class SlotMachineMgr : MonoBehaviour
 
     IEnumerator StartSlot(int slotIndex)
     {
+        yield return new WaitForSecondsRealtime(0.5f);
         for (int i = 0; i < (itemCount * (6 + slotIndex * 4) + answer[slotIndex]) * 2; i++)
         {
             slotSkillObject[slotIndex].transform.localPosition -= new Vector3(0, 50f, 0);
@@ -92,17 +94,22 @@ public class SlotMachineMgr : MonoBehaviour
             }
             yield return new WaitForSeconds(0.02f);
         }
-        for (int i = 0; i < itemCount; i++)
-        {
-            slot[i].interactable = true;
-        }
+
+        slot[slotIndex].interactable = true;
     }
 
     public void OnClickButton(int index)
     {
         displayResultImage.sprite = skillSprite[resultIndexList[index]];
+        Debug.Log("ResultIndex : " + resultIndexList[index]);
         PlayerData.Instance.resultIndex = resultIndexList[index];
         PlayerData.Instance.playerSkillUp = true;
+        for (int i = 0; i < slotSkillObject.Length; i++)
+        {
+            slotSkillObject[i].transform.localPosition = new Vector3(0, 300f, 0);
+        }
+
+        resultIndexList.Clear();
         UIController.Instance.PlayerLvUp(false);
         //gameObject.SetActive(false);
     }

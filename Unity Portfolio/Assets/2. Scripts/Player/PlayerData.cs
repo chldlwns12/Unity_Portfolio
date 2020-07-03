@@ -115,6 +115,21 @@ public class PlayerData : MonoBehaviour
                 }
             }
         }
+        if(playerSkill[12] == 1)
+        {
+            playerCurrentExp += 500f;
+            playerSkill[12] = 0;
+        }
+        if (playerSkill[13] == 1)
+        {
+            playerCurrentExp += 350f;
+            playerSkill[13] = 0;
+        }
+        if (playerSkill[14] == 1)
+        {
+            currentHp += 240f;
+            playerSkill[14] = 0;
+        }
     }
 
     public void PlayerExpCalc(float exp)

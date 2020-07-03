@@ -10,28 +10,28 @@ public class RouletteMgr : MonoBehaviour
     public Transform needle;
 
     public Sprite[] skillSprite;
-    public Image[] DisplayItemSlot;
+    public Image[] displayItemSlot;
 
-    List<int> StartList = new List<int>();
-    List<int> ResultIndexList = new List<int>();
-    int itemCount = 6;
+    List<int> startList = new List<int>();
+    List<int> resultIndexList = new List<int>();
+    int itemCount = 15;
 
-    public float endCount = 2.0f;
-    float currentCount = 0.0f;
+    bool isClick = false;
 
     void Start()
     {
+        isClick = false;
         for (int i = 0; i < itemCount; i++)
         {
-            StartList.Add(i);
+            startList.Add(i);
         }
 
-        for (int i = 0; i < itemCount; i++)
+        for (int i = 0; i < displayItemSlot.Length - 1; i++)
         {
-            int randomIndex = Random.Range(0, StartList.Count);
-            ResultIndexList.Add(StartList[randomIndex]);
-            DisplayItemSlot[i].sprite = skillSprite[StartList[randomIndex]];
-            StartList.RemoveAt(randomIndex);
+            int randomIndex = Random.Range(0, startList.Count);
+            resultIndexList.Add(startList[randomIndex]);
+            displayItemSlot[i].sprite = skillSprite[startList[randomIndex]];
+            startList.RemoveAt(randomIndex);
         }
 
         //StartCoroutine(StartRoulette());
@@ -46,11 +46,8 @@ public class RouletteMgr : MonoBehaviour
         while (true)
         {
             yield return null;
-            if (rotateSpeed <= 0.01f)
-            {
-                gameObject.SetActive(false);
-                break;
-            }
+            if (rotateSpeed <= 0.01f) break;
+
             rotateSpeed = Mathf.Lerp(rotateSpeed, 0, Time.deltaTime * 2f);
             roulettePlate.transform.Rotate(0, 0, rotateSpeed);
         }
@@ -64,27 +61,41 @@ public class RouletteMgr : MonoBehaviour
         float closetDis = 500f;
         float currentDis = 0f;
 
-        for (int i = 0; i < itemCount; i++)
+        for (int i = 0; i < displayItemSlot.Length - 1; i++)
         {
-            currentDis = Vector2.Distance(DisplayItemSlot[i].transform.position, needle.position);
+            currentDis = Vector2.Distance(displayItemSlot[i].transform.position, needle.position);
             if(closetDis > currentDis)
             {
                 closetDis = currentDis;
                 closetIndex = i;
             }
         }
-        Debug.Log("LV UP Index : " + closetIndex);
+        Debug.Log("closetIndex : " + closetIndex);
         if(closetIndex == -1)
         {
             Debug.Log("Something is wrong");
         }
-        DisplayItemSlot[itemCount].sprite = DisplayItemSlot[closetIndex].sprite;
+        displayItemSlot[6].sprite = displayItemSlot[closetIndex].sprite;
 
-        Debug.Log("LV UP Index : " + ResultIndexList[closetIndex]);
+        Debug.Log("ResultIndex : " + resultIndexList[closetIndex]);
+
+        RouletteOut(closetIndex);
+    }
+
+    private void RouletteOut(int index)
+    {
+        Debug.Log("ResultIndex : " + resultIndexList[index]);
+        PlayerData.Instance.resultIndex = resultIndexList[index];
+        PlayerData.Instance.playerSkillUp = true;
+        gameObject.SetActive(false);
     }
 
     public void OnRouletteButton()
     {
-        StartCoroutine(StartRoulette());
+        if (isClick == false)
+        {
+            isClick = true;
+            StartCoroutine(StartRoulette());
+        }
     }
 }

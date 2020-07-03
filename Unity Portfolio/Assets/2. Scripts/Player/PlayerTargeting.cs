@@ -18,12 +18,23 @@ public class PlayerTargeting : MonoBehaviour
 
     //public GameObject playerBolt;
     public Transform AttackPoint;
+    public Transform leftAttackPoint;
+    public Transform rightAttackPoint;
+    public Transform backAttackPoint;
 
     //오브젝트 풀링
-    //public Queue<GameObject> arrowPool;
-    //public Queue<GameObject> doubleArrowPool;
-    //int poolSize = 20;
-    //int fireIndex = 0;
+    public Queue<GameObject> arrowPool;
+    public Queue<GameObject> doubleArrowPool;
+    //public Queue<GameObject> leftArrowPool;
+    //public Queue<GameObject> rightArrowPool;
+    //public Queue<GameObject> backArrowPool;
+    int poolSize = 20;
+    int fireIndex = 0;
+
+    public void ArrowEnqueue(GameObject arrowObject)
+    {
+        arrowPool.Enqueue(arrowObject);
+    }
 
     public static PlayerTargeting Instance
     {
@@ -43,29 +54,50 @@ public class PlayerTargeting : MonoBehaviour
     }
     private static PlayerTargeting instance;
 
-    //private void Start()
-    //{
-    //    //오브젝트 풀링 초기화
-    //    InitObjectPooling();
-    //}
-    //
-    //private void InitObjectPooling()
-    //{
-    //    arrowPool = new Queue<GameObject>();
-    //    for (int i = 0; i < poolSize; i++)
-    //    {
-    //        GameObject arrow = Instantiate(PlayerData.Instance.PlayerBullet[0]);
-    //        arrow.SetActive(false);
-    //        arrowPool.Enqueue(arrow);
-    //    }
-    //    doubleArrowPool = new Queue<GameObject>();
-    //    for (int i = 0; i < poolSize; i++)
-    //    {
-    //        GameObject doubleArrow = Instantiate(PlayerData.Instance.PlayerBullet[1]);
-    //        doubleArrow.SetActive(false);
-    //        doubleArrowPool.Enqueue(doubleArrow);
-    //    }
-    //}
+    private void Start()
+    {
+        //오브젝트 풀링 초기화
+        InitObjectPooling();
+    }
+    
+    private void InitObjectPooling()
+    {
+        arrowPool = new Queue<GameObject>();
+        for (int i = 0; i < poolSize; i++)
+        {
+            GameObject arrow = Instantiate(PlayerData.Instance.PlayerBullet[0]);
+            arrow.SetActive(false);
+            arrowPool.Enqueue(arrow);
+        }
+        doubleArrowPool = new Queue<GameObject>();
+        for (int i = 0; i < poolSize; i++)
+        {
+            GameObject doubleArrow = Instantiate(PlayerData.Instance.PlayerBullet[1]);
+            doubleArrow.SetActive(false);
+            doubleArrowPool.Enqueue(doubleArrow);
+        }
+        //leftArrowPool = new Queue<GameObject>();
+        //for (int i = 0; i < poolSize; i++)
+        //{
+        //    GameObject arrow = Instantiate(PlayerData.Instance.PlayerBullet[0]);
+        //    arrow.SetActive(false);
+        //    leftArrowPool.Enqueue(arrow);
+        //}
+        //rightArrowPool = new Queue<GameObject>();
+        //for (int i = 0; i < poolSize; i++)
+        //{
+        //    GameObject arrow = Instantiate(PlayerData.Instance.PlayerBullet[0]);
+        //    arrow.SetActive(false);
+        //    rightArrowPool.Enqueue(arrow);
+        //}
+        //backArrowPool = new Queue<GameObject>();
+        //for (int i = 0; i < poolSize; i++)
+        //{
+        //    GameObject arrow = Instantiate(PlayerData.Instance.PlayerBullet[0]);
+        //    arrow.SetActive(false);
+        //    backArrowPool.Enqueue(arrow);
+        //}
+    }
 
     void Update()
     {
@@ -157,52 +189,116 @@ public class PlayerTargeting : MonoBehaviour
     public void Attack()
     {
         PlayerMove.Instance.Anim.SetFloat("AttackSpeed", PlayerData.Instance.atkSpeed);
-        Instantiate(PlayerData.Instance.PlayerBullet[PlayerData.Instance.playerSkill[2]], AttackPoint.position, transform.rotation);
-        //if (arrowPool.Count > 0)
-        //{
-        //    GameObject bullet = arrowPool.Dequeue();
-        //    bullet.SetActive(true);
-        //    bullet.transform.position = AttackPoint.transform.position;
-        //    bullet.transform.forward = AttackPoint.transform.forward;
-        //}
-        //else
-        //{
-        //    //총알 오브젝트 생성한다
-        //    GameObject bullet = Instantiate(PlayerData.Instance.PlayerBullet[PlayerData.Instance.playerSkill[2]]);
-        //    bullet.SetActive(false);
-        //    //생성된 총알 오브젝트를 풀에 담는다.
-        //    arrowPool.Enqueue(bullet);
-        //}
+        //Instantiate(PlayerData.Instance.PlayerBullet[PlayerData.Instance.playerSkill[2]], AttackPoint.position, transform.rotation);
+        //기본화살발사 및 전방화살
+        if (arrowPool.Count > 0)
+        {
+            GameObject bullet = arrowPool.Dequeue();
+            bullet.SetActive(true);
+            bullet.transform.position = AttackPoint.transform.position;
+            bullet.transform.forward = AttackPoint.transform.forward;
+            Debug.Log("Attack Forward : " + bullet.name);
+        }
+        else
+        {
+            //총알 오브젝트 생성한다
+            GameObject bullet = Instantiate(PlayerData.Instance.PlayerBullet[PlayerData.Instance.playerSkill[2]]);
+            bullet.SetActive(false);
+            //생성된 총알 오브젝트를 풀에 담는다.
+            arrowPool.Enqueue(bullet);
+        }
 
+        //멀티샷
         if (PlayerData.Instance.playerSkill[1] > 0)
         {
             Invoke("MultiShot", 0.2f);
         }
+
+        //사선화살
         if(PlayerData.Instance.playerSkill[3] > 0)
         {
             Instantiate(PlayerData.Instance.PlayerBullet[PlayerData.Instance.playerSkill[3] - 1], AttackPoint.position, Quaternion.Euler(transform.eulerAngles + new Vector3(0, -45f, 0)));
             Instantiate(PlayerData.Instance.PlayerBullet[PlayerData.Instance.playerSkill[3] - 1], AttackPoint.position, Quaternion.Euler(transform.eulerAngles + new Vector3(0, 45f, 0)));
         }
+
+        //후방화살
+        if (PlayerData.Instance.playerSkill[7] > 0)
+        {
+            if (arrowPool.Count > 0)
+            {
+                GameObject bullet2 = arrowPool.Dequeue();
+                bullet2.SetActive(true);
+                bullet2.transform.position = backAttackPoint.transform.position;
+                bullet2.transform.forward = backAttackPoint.transform.forward;
+                Debug.Log("Attack Back : " + bullet2.name);
+            }
+            else
+            {
+                //총알 오브젝트 생성한다
+                GameObject bullet2 = Instantiate(PlayerData.Instance.PlayerBullet[PlayerData.Instance.playerSkill[2]]);
+                bullet2.SetActive(false);
+                //생성된 총알 오브젝트를 풀에 담는다.
+                arrowPool.Enqueue(bullet2);
+            }
+        }
+
+        //사이드화살
+        if (PlayerData.Instance.playerSkill[11] > 0)
+        {
+            //왼쪽
+            if (arrowPool.Count > 0)
+            {
+                GameObject bullet = arrowPool.Dequeue();
+                bullet.SetActive(true);
+                bullet.transform.position = leftAttackPoint.transform.position;
+                bullet.transform.forward = leftAttackPoint.transform.forward;
+            }
+            else
+            {
+                //총알 오브젝트 생성한다
+                GameObject bullet = Instantiate(PlayerData.Instance.PlayerBullet[PlayerData.Instance.playerSkill[2]], AttackPoint.position, Quaternion.Euler(transform.eulerAngles + new Vector3(0, -90f, 0)));
+                bullet.SetActive(false);
+                //생성된 총알 오브젝트를 풀에 담는다.
+                arrowPool.Enqueue(bullet);
+            }
+            //오른쪽
+            if (arrowPool.Count > 0)
+            {
+                GameObject bullet = arrowPool.Dequeue();
+                bullet.SetActive(true);
+                bullet.transform.position = rightAttackPoint.transform.position;
+                bullet.transform.forward = rightAttackPoint.transform.forward;
+                
+            }
+            else
+            {
+                //총알 오브젝트 생성한다
+                GameObject bullet = Instantiate(PlayerData.Instance.PlayerBullet[PlayerData.Instance.playerSkill[2]], AttackPoint.position, Quaternion.Euler(transform.eulerAngles + new Vector3(0, 90f, 0)));
+                bullet.SetActive(false);
+                //생성된 총알 오브젝트를 풀에 담는다.
+                arrowPool.Enqueue(bullet);
+            }
+        }
     }
 
     void MultiShot()
     {
-        Instantiate(PlayerData.Instance.PlayerBullet[PlayerData.Instance.playerSkill[2]], AttackPoint.position, transform.rotation);
-        //if (arrowPool.Count > 0)
-        //{
-        //    GameObject bullet = arrowPool.Dequeue();
-        //    bullet.SetActive(true);
-        //    bullet.transform.position = AttackPoint.transform.position;
-        //    bullet.transform.forward = AttackPoint.transform.forward;
-        //}
-        //else
-        //{
-        //    //총알 오브젝트 생성한다
-        //    GameObject bullet = Instantiate(PlayerData.Instance.PlayerBullet[PlayerData.Instance.playerSkill[2]]);
-        //    bullet.SetActive(false);
-        //    //생성된 총알 오브젝트를 풀에 담는다.
-        //    arrowPool.Enqueue(bullet);
-        //}
+        //Instantiate(PlayerData.Instance.PlayerBullet[PlayerData.Instance.playerSkill[2]], AttackPoint.position, transform.rotation);
+        if (arrowPool.Count > 0)
+        {
+            GameObject bullet = arrowPool.Dequeue();
+            bullet.SetActive(true);
+            bullet.transform.position = AttackPoint.transform.position;
+            bullet.transform.forward = AttackPoint.transform.forward;
+        }
+        else
+        {
+            //총알 오브젝트 생성한다
+            GameObject bullet = Instantiate(PlayerData.Instance.PlayerBullet[PlayerData.Instance.playerSkill[2]]);
+            bullet.SetActive(false);
+            //생성된 총알 오브젝트를 풀에 담는다.
+            arrowPool.Enqueue(bullet);
+        }
 
         if (PlayerData.Instance.playerSkill[3] > 0)
         {

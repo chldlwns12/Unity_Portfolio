@@ -35,7 +35,7 @@ public class EnemyHpBar : MonoBehaviour
 
     IEnumerator Dameged()
     {
-        currentHp -= 300f;
+        currentHp -= PlayerData.Instance.damage;
         yield return new WaitForSeconds(0.5f);
         backHpHit = true;
     }
