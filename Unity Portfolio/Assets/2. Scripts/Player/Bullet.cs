@@ -12,7 +12,7 @@ public class Bullet : MonoBehaviour
 
     private void OnDisable()
     {
-        Debug.Log("Bullet Disable");
+        //Debug.Log("Bullet Disable");
     }
 
     void Start()

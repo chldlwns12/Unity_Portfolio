@@ -37,7 +37,7 @@ public class PlayerTargeting : MonoBehaviour
     {
         arrowObject.SetActive(false);
         arrowPool.Enqueue(arrowObject);
-        Debug.Log("Enqueued : " + arrowObject.name);
+        //Debug.Log("Enqueued : " + arrowObject.name);
     }
 
     public static PlayerTargeting Instance
@@ -182,7 +182,7 @@ public class PlayerTargeting : MonoBehaviour
                 bullet.SetActive(true);
                 bullet.transform.position = doublePoint1.transform.position;
                 bullet.transform.forward = doublePoint1.transform.forward;
-                Debug.Log("Attack Forward : " + bullet.name);
+                //Debug.Log("Attack Forward : " + bullet.name);
             }
             else
             {
@@ -199,7 +199,7 @@ public class PlayerTargeting : MonoBehaviour
                 bullet.SetActive(true);
                 bullet.transform.position = doublePoint2.transform.position;
                 bullet.transform.forward = doublePoint2.transform.forward;
-                Debug.Log("Attack Forward : " + bullet.name);
+                //Debug.Log("Attack Forward : " + bullet.name);
             }
             else
             {
@@ -218,7 +218,7 @@ public class PlayerTargeting : MonoBehaviour
                 bullet.SetActive(true);
                 bullet.transform.position = attackPoint.transform.position;
                 bullet.transform.forward = attackPoint.transform.forward;
-                Debug.Log("Attack Forward : " + bullet.name);
+                //Debug.Log("Attack Forward : " + bullet.name);
             }
             else
             {
@@ -285,7 +285,7 @@ public class PlayerTargeting : MonoBehaviour
                 bullet.SetActive(true);
                 bullet.transform.position = backAttackPoint.transform.position;
                 bullet.transform.forward = backAttackPoint.transform.forward;
-                Debug.Log("Attack Back : " + bullet.name);
+                //Debug.Log("Attack Back : " + bullet.name);
             }
             else
             {
@@ -347,7 +347,7 @@ public class PlayerTargeting : MonoBehaviour
                 bullet.SetActive(true);
                 bullet.transform.position = doublePoint1.transform.position;
                 bullet.transform.forward = doublePoint1.transform.forward;
-                Debug.Log("Attack Forward : " + bullet.name);
+                //Debug.Log("Attack Forward : " + bullet.name);
             }
             else
             {
@@ -364,7 +364,7 @@ public class PlayerTargeting : MonoBehaviour
                 bullet.SetActive(true);
                 bullet.transform.position = doublePoint2.transform.position;
                 bullet.transform.forward = doublePoint2.transform.forward;
-                Debug.Log("Attack Forward : " + bullet.name);
+                //Debug.Log("Attack Forward : " + bullet.name);
             }
             else
             {
@@ -383,7 +383,7 @@ public class PlayerTargeting : MonoBehaviour
                 bullet.SetActive(true);
                 bullet.transform.position = attackPoint.transform.position;
                 bullet.transform.forward = attackPoint.transform.forward;
-                Debug.Log("Attack Forward : " + bullet.name);
+                //Debug.Log("Attack Forward : " + bullet.name);
             }
             else
             {
@@ -441,7 +441,7 @@ public class PlayerTargeting : MonoBehaviour
                 bullet2.SetActive(true);
                 bullet2.transform.position = backAttackPoint.transform.position;
                 bullet2.transform.forward = backAttackPoint.transform.forward;
-                Debug.Log("Attack Back : " + bullet2.name);
+                //Debug.Log("Attack Back : " + bullet2.name);
             }
             else
             {

@@ -85,9 +85,9 @@ public class StageMgr : MonoBehaviour
                 }
                 else
                 {
-                    int randomIndex = Random.Range(0, StartPositionBoss.Count);
-                    Player.transform.position = StartPositionBoss[randomIndex].position;
-                    StartPositionBoss.RemoveAt(currentStage / 10);
+                    //int randomIndex = Random.Range(0, StartPositionBoss.Count);
+                    Player.transform.position = StartPositionBoss[0].position;
+                    StartPositionBoss.RemoveAt(0);
                 }
             }
         }

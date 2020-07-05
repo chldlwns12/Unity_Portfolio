@@ -4,6 +4,24 @@ using UnityEngine;
 
 public class EnemyPirateBoss : EnemyMeleeFSM
 {
+    public static EnemyPirateBoss Instance
+    {
+        get
+        {
+            if (instance == null)
+            {
+                instance = FindObjectOfType<EnemyPirateBoss>();
+                if (instance == null)
+                {
+                    var instanceContainer = new GameObject("EnemyPirateBoss");
+                    instance = instanceContainer.AddComponent<EnemyPirateBoss>();
+                }
+            }
+            return instance;
+        }
+    }
+    private static EnemyPirateBoss instance;
+
     public GameObject bossBullet;
     public Transform attackPoint;
     public LayerMask layerMaskWall;
@@ -18,7 +36,7 @@ public class EnemyPirateBoss : EnemyMeleeFSM
         attackCoolTimeCacl = attackCoolTime;
 
         playerRealizeRange = 13f;
-        attackRange = 20f;
+        attackRange = 13f;
         moveSpeed = 1f;
         nvAgent.stoppingDistance = 4f;
     }
@@ -27,7 +45,7 @@ public class EnemyPirateBoss : EnemyMeleeFSM
     {
         maxHp = 80000f;
         currentHp = maxHp;
-        damage = 300f;
+        damage = 200f;
         StartCoroutine(Attack());
     }
 
@@ -37,28 +55,22 @@ public class EnemyPirateBoss : EnemyMeleeFSM
         nvAgent.isStopped = true;
         transform.LookAt(player.transform.position);
 
-        if (Random.value < 0.7)
+        if (Random.value < 0.5)
         {
-            if (Random.value < 0.5)
+            if (!Anim.GetCurrentAnimatorStateInfo(0).IsName("Attack"))
             {
-                if (!Anim.GetCurrentAnimatorStateInfo(0).IsName("Attack01"))
-                {
-                    Anim.SetTrigger("Attack01");
-                }
+                Anim.SetTrigger("Attack");
             }
-            else
-            {
-                if (!Anim.GetCurrentAnimatorStateInfo(0).IsName("Attack02"))
-                {
-                    Anim.SetTrigger("Attack02");
-                }
-            }
-            yield return Delay500;
         }
         else
         {
-            
+            if (!Anim.GetCurrentAnimatorStateInfo(0).IsName("Attack2"))
+            {
+                Anim.SetTrigger("Attack2");
+            }
         }
+        yield return Delay500;
+
         canAtk = false;
         currentState = State.Idle;
     }
@@ -106,6 +118,8 @@ public class EnemyPirateBoss : EnemyMeleeFSM
         }
         else
         {
+            //Debug.Log("Current Hp : " + currentHp);
+            //Debug.Log("Max Hp : " + maxHp);
             UIController.Instance.bossCurrentHp = currentHp;
             UIController.Instance.bossMaxHp = maxHp;
         }

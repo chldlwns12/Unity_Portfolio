@@ -54,6 +54,8 @@ public class PlayerData : MonoBehaviour
     public bool playerImmotal = false;
     public int resultIndex;
 
+    string saveList = "";
+
     private void Update()
     {
         if(!playerDead && currentHp <= 0)
@@ -77,7 +79,6 @@ public class PlayerData : MonoBehaviour
                 }
             }
         }
-
         PlayerSkillSet();
     }
 
@@ -86,22 +87,25 @@ public class PlayerData : MonoBehaviour
         float immotalRandom = Random.Range(0, 50f);
         float immotalCount = 0;
         float count = 0;
-        if(playerSkill[5] == 1)     //공속
+        if(playerSkill[5] > 0)     //공속
         {
             atkSpeed += 0.1f;
+            //MenuSkillList.Instance.skillIndex.Add(5);
             playerSkill[5] = 0;
         }
-        if (playerSkill[6] == 1)    //공격력
+        if (playerSkill[6] > 0)    //공격력
         {
             damage += 75f;
+            //MenuSkillList.Instance.skillIndex.Add(6);
             playerSkill[6] = 0;
         }
-        if (playerSkill[9] == 1)    //피통
+        if (playerSkill[9] > 0)    //피통
         {
             HpBar.Instance.GetHpBoost();
+            //MenuSkillList.Instance.skillIndex.Add(9);
             playerSkill[9] = 0;
         }
-        if (playerSkill[10] == 1)   //무적
+        if (playerSkill[10] > 0)   //무적
         {
             immotalCount += Time.deltaTime;
             if(immotalCount > immotalRandom)

@@ -44,8 +44,22 @@ public class SlotMachineMgr : MonoBehaviour
 
     int[] answer = { 2, 3, 1 };
 
+    public Text playerLvText;
+    public Text startText;
+
     void OnEnable()
     {
+        if(StageMgr.Instance.currentStage > 0)
+        {
+            startText.gameObject.SetActive(false);
+            playerLvText.gameObject.SetActive(true);
+            playerLvText.text = "레벨 업그레이드! => 레벨 " + PlayerData.Instance.playerLv;
+        }
+        else
+        {
+            startText.gameObject.SetActive(true);
+            playerLvText.gameObject.SetActive(false);
+        }
         //for (int i = 0; i < itemCount * slot.Length; i++)
         for (int i = 0; i < skillSprite.Length; i++)
         {

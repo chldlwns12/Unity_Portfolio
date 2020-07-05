@@ -1,9 +1,27 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.PlayerLoop;
 
 public class EnemyStageBoss : EnemyMeleeFSM
 {
+    public static EnemyStageBoss Instance
+    {
+        get
+        {
+            if (instance == null)
+            {
+                instance = FindObjectOfType<EnemyStageBoss>();
+                if (instance == null)
+                {
+                    var instanceContainer = new GameObject("EnemyStageBoss");
+                    instance = instanceContainer.AddComponent<EnemyStageBoss>();
+                }
+            }
+            return instance;
+        }
+    }
+    private static EnemyStageBoss instance;
 
     public GameObject bossBullet;
     public Transform attackPoint;
@@ -11,6 +29,14 @@ public class EnemyStageBoss : EnemyMeleeFSM
 
     WaitForSeconds Delay500 = new WaitForSeconds(0.5f);
     WaitForSeconds Delay250 = new WaitForSeconds(0.25f);
+
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawWireSphere(transform.position, playerRealizeRange);
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(transform.position, attackRange);
+    }
 
     protected void Start()
     {
@@ -26,6 +52,7 @@ public class EnemyStageBoss : EnemyMeleeFSM
 
     protected override void InitMonster()
     {
+        Debug.Log("InitLastBoss");
         maxHp = 100000f;
         currentHp = maxHp;
         damage = 300f;
@@ -58,41 +85,41 @@ public class EnemyStageBoss : EnemyMeleeFSM
         }
         else
         {
-            //if(!Anim.GetCurrentAnimatorStateInfo(0).IsName("GetHit"))
-            //{
-            //    Debug.Log("GetHit!");
-            //    Anim.SetTrigger("GetHit");
-            //}
-            //transform.LookAt(player.transform.position);
-            //Physics.Raycast(new Vector3(transform.position.x, 0.5f, transform.position.z), transform.forward, out RaycastHit hit, 60f, layerMaskWall);
-            //Vector3 targetPoint = hit.point;
-            //
-            //yield return Delay500;
-            //
-            //nvAgent.isStopped = false;
-            //nvAgent.stoppingDistance = 0f;
-            //nvAgent.SetDestination(targetPoint);
-            //nvAgent.speed = 200f;
-            //
-            //while (true)
-            //{
-            //    if(Vector3.Distance(nvAgent.destination, transform.position) > 3f)
-            //    {
-            //        if(!Anim.GetCurrentAnimatorStateInfo(0).IsName("Walk"))
-            //        {
-            //            Anim.SetTrigger("Walk");
-            //        }
-            //    }
-            //    else
-            //    {
-            //        nvAgent.isStopped = true;
-            //
-            //        break;
-            //    }
-            //    yield return null;
-            //}
-            //nvAgent.speed = moveSpeed;
-            //nvAgent.stoppingDistance = attackRange;
+            if(!Anim.GetCurrentAnimatorStateInfo(0).IsName("GetHit"))
+            {
+                //Debug.Log("GetHit!");
+                Anim.SetTrigger("GetHit");
+            }
+            transform.LookAt(player.transform.position);
+            Physics.Raycast(new Vector3(transform.position.x, 0.5f, transform.position.z), transform.forward, out RaycastHit hit, 60f, layerMaskWall);
+            Vector3 targetPoint = hit.point;
+            
+            yield return Delay500;
+            
+            nvAgent.isStopped = false;
+            nvAgent.stoppingDistance = 0f;
+            nvAgent.SetDestination(targetPoint);
+            nvAgent.speed = 200f;
+            
+            while (true)
+            {
+                if(Vector3.Distance(nvAgent.destination, transform.position) > 3f)
+                {
+                    if(!Anim.GetCurrentAnimatorStateInfo(0).IsName("Walk"))
+                    {
+                        Anim.SetTrigger("Walk");
+                    }
+                }
+                else
+                {
+                    nvAgent.isStopped = true;
+            
+                    break;
+                }
+                yield return null;
+            }
+            nvAgent.speed = moveSpeed;
+            nvAgent.stoppingDistance = attackRange;
         }
         canAtk = false;
         currentState = State.Idle;
@@ -141,8 +168,8 @@ public class EnemyStageBoss : EnemyMeleeFSM
         }
         else
         {
-            UIController.Instance.bossCurrentHp = currentHp;
-            UIController.Instance.bossMaxHp = maxHp;
+            //UIController.Instance.bossCurrentHp = currentHp;
+            //UIController.Instance.bossMaxHp = maxHp;
         }
     }
 

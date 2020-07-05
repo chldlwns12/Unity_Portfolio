@@ -22,8 +22,10 @@ public class UIController : MonoBehaviour
 
     public Text playerLvText;
 
-    public float bossCurrentHp;
     public float bossMaxHp;
+    public float bossCurrentHp;
+
+    public GameObject menu;
 
     public static UIController Instance
     {
@@ -62,6 +64,16 @@ public class UIController : MonoBehaviour
         }
         else
         {
+            if(StageMgr.Instance.currentStage == 20)
+            {
+                bossCurrentHp = EnemyStageBoss.Instance.currentHp;
+                bossMaxHp = EnemyStageBoss.Instance.maxHp;
+            }
+            //if (StageMgr.Instance.currentStage == 10)
+            //{
+            //    bossCurrentHp = EnemyPirateBoss.Instance.currentHp;
+            //    bossMaxHp = EnemyPirateBoss.Instance.maxHp;
+            //}
             bossHpBar.value = Mathf.Lerp(bossHpBar.value, bossCurrentHp / bossMaxHp, 5f * Time.deltaTime);
 
             if(backHpHit)
@@ -145,5 +157,22 @@ public class UIController : MonoBehaviour
         yield return new WaitForSecondsRealtime(2f);
         Time.timeScale = 1f;
         SceneManager.LoadScene(0);
+    }
+
+    public void OnMenuButtonClick()
+    {
+        Time.timeScale = 0f;
+        menu.SetActive(true);
+    }
+
+    public void OnReturnButtonClick()
+    {
+        Time.timeScale = 1f;
+        menu.SetActive(false);
+    }
+
+    public void OnHomeButtonClick()
+    {
+        SceneMgr.Instance.LoadScene("StartScene");
     }
 }
