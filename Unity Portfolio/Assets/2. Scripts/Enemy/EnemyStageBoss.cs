@@ -58,41 +58,41 @@ public class EnemyStageBoss : EnemyMeleeFSM
         }
         else
         {
-            if(!Anim.GetCurrentAnimatorStateInfo(0).IsName("GetHit"))
-            {
-                Debug.Log("GetHit!");
-                Anim.SetTrigger("GetHit");
-            }
-            transform.LookAt(player.transform.position);
-            Physics.Raycast(new Vector3(transform.position.x, 0.5f, transform.position.z), transform.forward, out RaycastHit hit, 60f, layerMaskWall);
-            Vector3 targetPoint = hit.point;
-
-            yield return Delay500;
-
-            nvAgent.isStopped = false;
-            nvAgent.stoppingDistance = 0f;
-            nvAgent.SetDestination(targetPoint);
-            nvAgent.speed = 200f;
-
-            while (true)
-            {
-                if(Vector3.Distance(nvAgent.destination, transform.position) > 3f)
-                {
-                    if(!Anim.GetCurrentAnimatorStateInfo(0).IsName("Walk"))
-                    {
-                        Anim.SetTrigger("Walk");
-                    }
-                }
-                else
-                {
-                    nvAgent.isStopped = true;
-
-                    break;
-                }
-                yield return null;
-            }
-            nvAgent.speed = moveSpeed;
-            nvAgent.stoppingDistance = attackRange;
+            //if(!Anim.GetCurrentAnimatorStateInfo(0).IsName("GetHit"))
+            //{
+            //    Debug.Log("GetHit!");
+            //    Anim.SetTrigger("GetHit");
+            //}
+            //transform.LookAt(player.transform.position);
+            //Physics.Raycast(new Vector3(transform.position.x, 0.5f, transform.position.z), transform.forward, out RaycastHit hit, 60f, layerMaskWall);
+            //Vector3 targetPoint = hit.point;
+            //
+            //yield return Delay500;
+            //
+            //nvAgent.isStopped = false;
+            //nvAgent.stoppingDistance = 0f;
+            //nvAgent.SetDestination(targetPoint);
+            //nvAgent.speed = 200f;
+            //
+            //while (true)
+            //{
+            //    if(Vector3.Distance(nvAgent.destination, transform.position) > 3f)
+            //    {
+            //        if(!Anim.GetCurrentAnimatorStateInfo(0).IsName("Walk"))
+            //        {
+            //            Anim.SetTrigger("Walk");
+            //        }
+            //    }
+            //    else
+            //    {
+            //        nvAgent.isStopped = true;
+            //
+            //        break;
+            //    }
+            //    yield return null;
+            //}
+            //nvAgent.speed = moveSpeed;
+            //nvAgent.stoppingDistance = attackRange;
         }
         canAtk = false;
         currentState = State.Idle;
@@ -156,19 +156,18 @@ public class EnemyStageBoss : EnemyMeleeFSM
 
             Instantiate(EffectSet.Instance.OneDmgEffect, other.transform.position, Quaternion.Euler(90, 0, 0));
 
-            GameObject damageTextClone = Instantiate(EffectSet.Instance.MonsterDmgText, transform.position, Quaternion.identity);
+            GameObject dmgTextClone = Instantiate(EffectSet.Instance.MonsterDmgText, transform.position, Quaternion.identity);
 
-            if(Random.value < 0.5)
+            if (Random.value < 0.5)
             {
-                currentHp -= arrowDmg;
-                damageTextClone.GetComponent<DmgTxt>().DisplayDamage(arrowDmg, false);
+                currentHp -= other.gameObject.GetComponent<Bullet>().damage;
+                dmgTextClone.GetComponent<DmgTxt>().DisplayDamage(other.gameObject.GetComponent<Bullet>().damage, false);
             }
             else
             {
-                currentHp -= arrowDmg * 2f;
-                damageTextClone.GetComponent<DmgTxt>().DisplayDamage(arrowDmg * 2f, true);
+                currentHp -= other.gameObject.GetComponent<Bullet>().damage * 4;
+                dmgTextClone.GetComponent<DmgTxt>().DisplayDamage(other.gameObject.GetComponent<Bullet>().damage * 2, true);
             }
-            Destroy(other.gameObject);
         }
     }
 }

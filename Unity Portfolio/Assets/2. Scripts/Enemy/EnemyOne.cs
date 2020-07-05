@@ -78,23 +78,21 @@ public class EnemyOne : EnemyMeleeFSM
     {
         if (other.transform.CompareTag("Arrow"))
         {
-            enemyCanvasGo.GetComponent<EnemyHpBar>().Dmg();
+            enemyCanvasGo.GetComponent<EnemyHpBar>().Dmg(other.gameObject);
             Instantiate(EffectSet.Instance.OneDmgEffect, other.transform.position, Quaternion.Euler(90, 0, 0));
 
-            GameObject dmgTextColone = Instantiate(EffectSet.Instance.MonsterDmgText, transform.position, Quaternion.identity);
+            GameObject dmgTextClone = Instantiate(EffectSet.Instance.MonsterDmgText, transform.position, Quaternion.identity);
 
-            if(Random.value < 0.5)
+            if (Random.value < 0.5)
             {
                 currentHp -= other.gameObject.GetComponent<Bullet>().damage;
-                dmgTextColone.GetComponent<DmgTxt>().DisplayDamage(other.gameObject.GetComponent<Bullet>().damage, false);
+                dmgTextClone.GetComponent<DmgTxt>().DisplayDamage(other.gameObject.GetComponent<Bullet>().damage, false);
             }
             else
             {
-                currentHp -= other.gameObject.GetComponent<Bullet>().damage * 2;
-                dmgTextColone.GetComponent<DmgTxt>().DisplayDamage(other.gameObject.GetComponent<Bullet>().damage * 2, true);
+                currentHp -= other.gameObject.GetComponent<Bullet>().damage * 4;
+                dmgTextClone.GetComponent<DmgTxt>().DisplayDamage(other.gameObject.GetComponent<Bullet>().damage * 2, true);
             }
-
-            //Destroy(other.gameObject);
         }
     }
 }

@@ -74,7 +74,7 @@ public class PlayerMove : MonoBehaviour
             if (!Anim.GetCurrentAnimatorStateInfo(0).IsName("Dmg"))
             {
                 Anim.SetTrigger("Dmg");
-                Instantiate(EffectSet.Instance.PlayerDmgEffect, PlayerTargeting.Instance.AttackPoint.position, Quaternion.Euler(90, 0, 0));
+                Instantiate(EffectSet.Instance.PlayerDmgEffect, PlayerTargeting.Instance.attackPoint.position, Quaternion.Euler(90, 0, 0));
             }
         }
 
@@ -86,7 +86,7 @@ public class PlayerMove : MonoBehaviour
             if (!Anim.GetCurrentAnimatorStateInfo(0).IsName("Dmg"))
             {
                 Anim.SetTrigger("Dmg");
-                Instantiate(EffectSet.Instance.PlayerDmgEffect, PlayerTargeting.Instance.AttackPoint.position, Quaternion.Euler(90, 0, 0));
+                Instantiate(EffectSet.Instance.PlayerDmgEffect, PlayerTargeting.Instance.attackPoint.position, Quaternion.Euler(90, 0, 0));
             }
         }
 
@@ -109,7 +109,7 @@ public class PlayerMove : MonoBehaviour
             if (!Anim.GetCurrentAnimatorStateInfo(0).IsName("Dmg"))
             {
                 Anim.SetTrigger("Dmg");
-                Instantiate(EffectSet.Instance.PlayerDmgEffect, PlayerTargeting.Instance.AttackPoint.position, Quaternion.Euler(90, 0, 0));
+                Instantiate(EffectSet.Instance.PlayerDmgEffect, PlayerTargeting.Instance.attackPoint.position, Quaternion.Euler(90, 0, 0));
             }
         }
 
@@ -123,7 +123,7 @@ public class PlayerMove : MonoBehaviour
             if (!Anim.GetCurrentAnimatorStateInfo(0).IsName("Dmg"))
             {
                 Anim.SetTrigger("Dmg");
-                Instantiate(EffectSet.Instance.PlayerDmgEffect, PlayerTargeting.Instance.AttackPoint.position, Quaternion.Euler(90, 0, 0));
+                Instantiate(EffectSet.Instance.PlayerDmgEffect, PlayerTargeting.Instance.attackPoint.position, Quaternion.Euler(90, 0, 0));
             }
         }
     }

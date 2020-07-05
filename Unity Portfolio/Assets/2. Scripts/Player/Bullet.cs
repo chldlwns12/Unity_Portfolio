@@ -23,7 +23,7 @@ public class Bullet : MonoBehaviour
         damage = PlayerData.Instance.damage;
 
         //Destroy(gameObject, 5f);
-        Invoke("PoolingReset", 5f);
+        //Invoke("PoolingReset", 5f);
     }
 
     private void Update()
@@ -37,8 +37,9 @@ public class Bullet : MonoBehaviour
 
     void PoolingReset()
     {
-        gameObject.SetActive(false);
-        PlayerTargeting.Instance.ArrowEnqueue(gameObject);
+        bounceCount = 2;
+        wallBounceCount = 2;
+        damage = PlayerData.Instance.damage;
     }
 
     Vector3 ResultDir(int index)
@@ -69,7 +70,7 @@ public class Bullet : MonoBehaviour
 
         if(closetIndex == -1)
         {
-            gameObject.SetActive(false);
+            PoolingReset();
             PlayerTargeting.Instance.ArrowEnqueue(gameObject);
             //Destroy(gameObject, 0.2f);
             return Vector3.zero;
@@ -100,20 +101,20 @@ public class Bullet : MonoBehaviour
                 }
             }
             rb.velocity = Vector3.zero;
-            gameObject.SetActive(false);
+            PoolingReset();
             PlayerTargeting.Instance.ArrowEnqueue(gameObject);
             //Destroy(gameObject, 0.2f);
         }
-        else if(other.transform.CompareTag("Wall") && rb != null)
-        {
-            if(PlayerData.Instance.playerSkill[4] == 0)
-            {
-                rb.velocity = Vector3.zero;
-                gameObject.SetActive(false);
-                PlayerTargeting.Instance.ArrowEnqueue(gameObject);
-                //Destroy(gameObject, 0.2f);
-            }
-        }
+        //else if(other.transform.CompareTag("Wall") && rb != null)
+        //{
+        //    if(PlayerData.Instance.playerSkill[4] == 0)
+        //    {
+        //        rb.velocity = Vector3.zero;
+        //        gameObject.SetActive(false);
+        //        PlayerTargeting.Instance.ArrowEnqueue(gameObject);
+        //        //Destroy(gameObject, 0.2f);
+        //    }
+        //}
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -133,7 +134,7 @@ public class Bullet : MonoBehaviour
                 }
             }
             rb.velocity = Vector3.zero;
-            gameObject.SetActive(false);
+            PoolingReset();
             PlayerTargeting.Instance.ArrowEnqueue(gameObject);
             //Destroy(gameObject);
         }

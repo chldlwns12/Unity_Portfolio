@@ -28,14 +28,26 @@ public class EnemyHpBar : MonoBehaviour
         }
     }
 
-    public void Dmg()
+    public void Dmg(GameObject arrow)
     {
-        StartCoroutine(Dameged());
+        StartCoroutine(Dameged(arrow));
     }
 
-    IEnumerator Dameged()
+    IEnumerator Dameged(GameObject arrow)
     {
-        currentHp -= PlayerData.Instance.damage;
+        if (PlayerData.Instance.playerSkill[2] > 0)
+        {
+            for (int i = 0; i < 2; i++)
+            {
+                currentHp -= arrow.GetComponent<Bullet>().damage;
+            }
+        }
+        else
+        {
+            currentHp -= arrow.GetComponent<Bullet>().damage;
+        }
+
+        //currentHp -= PlayerData.Instance.damage;
         yield return new WaitForSeconds(0.5f);
         backHpHit = true;
     }

@@ -15,7 +15,7 @@ public class EnemyControll : MonoBehaviour
     {
         if(collision.transform.CompareTag("Arrow"))
         {
-            enemyCanvasGo.GetComponent<EnemyHpBar>().Dmg();
+            //enemyCanvasGo.GetComponent<EnemyHpBar>().Dmg();
         }
     }
 }

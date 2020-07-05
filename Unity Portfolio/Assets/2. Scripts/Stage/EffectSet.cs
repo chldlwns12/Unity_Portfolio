@@ -21,6 +21,7 @@ public class EffectSet : MonoBehaviour
         }
     }
     private static EffectSet instance;
+    //public float dmgCount = 0f;
 
     [Header("Monster")]
     public GameObject OneAtkEffect;

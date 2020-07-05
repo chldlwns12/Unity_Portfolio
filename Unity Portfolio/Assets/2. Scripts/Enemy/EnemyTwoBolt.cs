@@ -30,7 +30,7 @@ public class EnemyTwoBolt : MonoBehaviour
             if (!PlayerMove.Instance.Anim.GetCurrentAnimatorStateInfo(0).IsName("Dmg"))
             {
                 PlayerMove.Instance.Anim.SetTrigger("Dmg");
-                Instantiate(EffectSet.Instance.PlayerDmgEffect, PlayerTargeting.Instance.AttackPoint.position, Quaternion.Euler(90, 0, 0));
+                Instantiate(EffectSet.Instance.PlayerDmgEffect, PlayerTargeting.Instance.attackPoint.position, Quaternion.Euler(90, 0, 0));
             }
         }
     }

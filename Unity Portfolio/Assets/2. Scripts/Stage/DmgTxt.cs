@@ -26,5 +26,24 @@ public class DmgTxt : MonoBehaviour
         {
             dmgText.text = "<color=#ffffff>" + "-" + arrowDmg + "</color>";
         }
+
+        //if (PlayerData.Instance.playerSkill[2] > 0)
+        //{
+        //    StartCoroutine(DoubleShot(arrowDmg, isCritical));
+        //}
     }
+
+    //IEnumerator DoubleShot(float arrowDmg, bool isCritical)
+    //{
+    //    yield return new WaitForSeconds(1f);
+    //    
+    //    if (isCritical)
+    //    {
+    //        dmgText.text = "<color=#ff0000>" + "-" + arrowDmg + "</color>";
+    //    }
+    //    else
+    //    {
+    //        dmgText.text = "<color=#ffffff>" + "-" + arrowDmg + "</color>";
+    //    }
+    //}
 }

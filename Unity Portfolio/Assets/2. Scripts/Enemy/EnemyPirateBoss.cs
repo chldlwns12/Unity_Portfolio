@@ -121,19 +121,19 @@ public class EnemyPirateBoss : EnemyMeleeFSM
 
             Instantiate(EffectSet.Instance.OneDmgEffect, other.transform.position, Quaternion.Euler(90, 0, 0));
 
-            GameObject damageTextClone = Instantiate(EffectSet.Instance.MonsterDmgText, transform.position, Quaternion.identity);
+            GameObject dmgTextClone = Instantiate(EffectSet.Instance.MonsterDmgText, transform.position, Quaternion.identity);
 
             if (Random.value < 0.5)
             {
-                currentHp -= arrowDmg;
-                damageTextClone.GetComponent<DmgTxt>().DisplayDamage(arrowDmg, false);
+                currentHp -= other.gameObject.GetComponent<Bullet>().damage;
+                dmgTextClone.GetComponent<DmgTxt>().DisplayDamage(other.gameObject.GetComponent<Bullet>().damage, false);
             }
             else
             {
-                currentHp -= arrowDmg * 2f;
-                damageTextClone.GetComponent<DmgTxt>().DisplayDamage(arrowDmg * 2f, true);
+                currentHp -= other.gameObject.GetComponent<Bullet>().damage * 4;
+                dmgTextClone.GetComponent<DmgTxt>().DisplayDamage(other.gameObject.GetComponent<Bullet>().damage * 2, true);
             }
-            Destroy(other.gameObject);
+            //Destroy(other.gameObject);
         }
     }
 }
