@@ -24,12 +24,13 @@ public class EffectSet : MonoBehaviour
     //public float dmgCount = 0f;
 
     [Header("Monster")]
-    public GameObject OneAtkEffect;
-    public GameObject OneDmgEffect;
-    public GameObject MonsterDmgText;
+    public GameObject oneAtkEffect;
+    public GameObject oneDmgEffect;
+    public GameObject monsterDmgText;
 
     [Header("Player")]
-    public GameObject PlayerAtkEffect;
-    public GameObject PlayerDmgEffect;
-    public GameObject PlayerLvUpEffect;
+    public GameObject playerAtkEffect;
+    public GameObject playerDmgEffect;
+    
+    
 }

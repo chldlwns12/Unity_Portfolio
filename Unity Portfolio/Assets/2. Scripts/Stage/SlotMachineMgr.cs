@@ -101,10 +101,10 @@ public class SlotMachineMgr : MonoBehaviour
         yield return new WaitForSecondsRealtime(0.5f);
         for (int i = 0; i < (itemCount * (6 + slotIndex * 4) + answer[slotIndex]) * 2; i++)
         {
-            slotSkillObject[slotIndex].transform.localPosition -= new Vector3(0, 50f, 0);
-            if (slotSkillObject[slotIndex].transform.localPosition.y < 50f)
+            slotSkillObject[slotIndex].transform.localPosition -= new Vector3(0, 75f, 0);
+            if (slotSkillObject[slotIndex].transform.localPosition.y < 75f)
             {
-                slotSkillObject[slotIndex].transform.localPosition += new Vector3(0, 300f, 0);
+                slotSkillObject[slotIndex].transform.localPosition += new Vector3(0, 450f, 0);
             }
             yield return new WaitForSeconds(0.02f);
         }

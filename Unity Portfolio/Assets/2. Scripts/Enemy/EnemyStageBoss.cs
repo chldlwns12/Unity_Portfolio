@@ -142,7 +142,7 @@ public class EnemyStageBoss : EnemyMeleeFSM
 
     protected override void AtkEffect()
     {
-        Instantiate(EffectSet.Instance.OneAtkEffect, transform.position, Quaternion.Euler(90, 0, 0));
+        Instantiate(EffectSet.Instance.oneAtkEffect, transform.position, Quaternion.Euler(90, 0, 0));
     }
 
     private void Update()
@@ -181,9 +181,9 @@ public class EnemyStageBoss : EnemyMeleeFSM
 
             UIController.Instance.Dmg();
 
-            Instantiate(EffectSet.Instance.OneDmgEffect, other.transform.position, Quaternion.Euler(90, 0, 0));
+            Instantiate(EffectSet.Instance.oneDmgEffect, other.transform.position, Quaternion.Euler(90, 0, 0));
 
-            GameObject dmgTextClone = Instantiate(EffectSet.Instance.MonsterDmgText, transform.position, Quaternion.identity);
+            GameObject dmgTextClone = Instantiate(EffectSet.Instance.monsterDmgText, transform.position, Quaternion.identity);
 
             if (Random.value < 0.5)
             {

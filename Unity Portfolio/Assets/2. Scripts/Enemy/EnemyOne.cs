@@ -48,7 +48,7 @@ public class EnemyOne : EnemyMeleeFSM
 
     protected override void AtkEffect()
     {
-        Instantiate(EffectSet.Instance.OneAtkEffect, transform.position, Quaternion.Euler(90, 0, 0));
+        Instantiate(EffectSet.Instance.oneAtkEffect, transform.position, Quaternion.Euler(90, 0, 0));
     }
 
     void Update()
@@ -79,9 +79,9 @@ public class EnemyOne : EnemyMeleeFSM
         if (other.transform.CompareTag("Arrow"))
         {
             enemyCanvasGo.GetComponent<EnemyHpBar>().Dmg(other.gameObject);
-            Instantiate(EffectSet.Instance.OneDmgEffect, other.transform.position, Quaternion.Euler(90, 0, 0));
+            Instantiate(EffectSet.Instance.oneDmgEffect, other.transform.position, Quaternion.Euler(90, 0, 0));
 
-            GameObject dmgTextClone = Instantiate(EffectSet.Instance.MonsterDmgText, transform.position, Quaternion.identity);
+            GameObject dmgTextClone = Instantiate(EffectSet.Instance.monsterDmgText, transform.position, Quaternion.identity);
 
             if (Random.value < 0.5)
             {

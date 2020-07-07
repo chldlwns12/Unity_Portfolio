@@ -100,6 +100,7 @@ public class Bullet : MonoBehaviour
                     return;
                 }
             }
+
             rb.velocity = Vector3.zero;
             PoolingReset();
             PlayerTargeting.Instance.ArrowEnqueue(gameObject);

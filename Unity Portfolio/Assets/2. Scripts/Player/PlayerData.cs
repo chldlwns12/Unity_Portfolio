@@ -54,6 +54,12 @@ public class PlayerData : MonoBehaviour
     public bool playerImmotal = false;
     public int resultIndex;
 
+    public GameObject playerImmotalEffect;
+    float immotalCount = 0;
+    float count = 0;
+
+    public GameObject playerLvUpEffect;
+
     string saveList = "";
 
     private void Update()
@@ -84,9 +90,8 @@ public class PlayerData : MonoBehaviour
 
     private void PlayerSkillSet()
     {
-        float immotalRandom = Random.Range(0, 50f);
-        float immotalCount = 0;
-        float count = 0;
+        //float immotalRandom = Random.Range(0, 50f);
+        
         if(playerSkill[5] > 0)     //공속
         {
             atkSpeed += 0.1f;
@@ -108,13 +113,20 @@ public class PlayerData : MonoBehaviour
         if (playerSkill[10] > 0)   //무적
         {
             immotalCount += Time.deltaTime;
-            if(immotalCount > immotalRandom)
+            Debug.Log("immotalCount : " + immotalCount);
+            Debug.Log("Count : " + count);
+            if(immotalCount > 10f)
             {
+                Debug.Log("무적시작");
                 playerImmotal = true;
-
+                playerImmotalEffect.SetActive(true);
                 count += Time.deltaTime;
-                if(count > 1.5f)
+                if(count > 2.5f)
                 {
+                    Debug.Log("무적끝");
+                    playerImmotalEffect.SetActive(false);
+                    immotalCount = 0;
+                    count = 0;
                     playerImmotal = false;
                 }
             }
@@ -151,11 +163,11 @@ public class PlayerData : MonoBehaviour
     IEnumerator PlayerLevelUp()
     {
         yield return null;
-        EffectSet.Instance.PlayerLvUpEffect.transform.position = player.transform.position;
-        EffectSet.Instance.PlayerLvUpEffect.SetActive(true);
+        //EffectSet.Instance.playerLvUpEffect.transform.position = player.transform.position;
+        playerLvUpEffect.SetActive(true);
         yield return new WaitForSeconds(1.5f);
         UIController.Instance.PlayerLvUp(true);
         yield return new WaitForSeconds(1.5f);
-        EffectSet.Instance.PlayerLvUpEffect.SetActive(false);
+        playerLvUpEffect.SetActive(false);
     }
 }

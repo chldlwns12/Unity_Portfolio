@@ -75,7 +75,7 @@ public class RouletteMgr : MonoBehaviour
         {
             Debug.Log("Something is wrong");
         }
-        displayItemSlot[6].sprite = displayItemSlot[closetIndex].sprite;
+        //displayItemSlot[6].sprite = displayItemSlot[closetIndex].sprite;
 
         Debug.Log("ResultIndex : " + resultIndexList[closetIndex]);
 
