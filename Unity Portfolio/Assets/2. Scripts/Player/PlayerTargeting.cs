@@ -103,7 +103,7 @@ public class PlayerTargeting : MonoBehaviour
                 currentDist = Vector3.Distance(transform.position, monsterList[i].transform.GetChild(0).position);
 
                 RaycastHit hit;
-                bool isHit = Physics.Raycast(transform.position, monsterList[i].transform.GetChild(0).position - transform.position,
+                bool isHit = Physics.Raycast(transform.position + new Vector3(0, 0.25f, 0), monsterList[i].transform.GetChild(0).position - transform.position,
                                              out hit, 20f, layerMask);
 
                 if (isHit && hit.transform.CompareTag("Monster"))
@@ -500,7 +500,7 @@ public class PlayerTargeting : MonoBehaviour
             {
                 if (monsterList[i] == null) { return; }
                 RaycastHit hit;
-                bool isHit = Physics.Raycast(transform.position, monsterList[i].transform.GetChild(0).position - transform.position,
+                bool isHit = Physics.Raycast(transform.position + new Vector3(0, 0.25f, 0), monsterList[i].transform.GetChild(0).position - transform.position,
                                              out hit, 20f, layerMask);
 
                 if (isHit && hit.transform.CompareTag("Monster"))
@@ -511,7 +511,7 @@ public class PlayerTargeting : MonoBehaviour
                 {
                     Gizmos.color = Color.red;
                 }
-                Gizmos.DrawRay(transform.position, monsterList[i].transform.GetChild(0).position - transform.position);
+                Gizmos.DrawRay(transform.position + new Vector3(0, 0.25f, 0), monsterList[i].transform.GetChild(0).position - transform.position);
             }
         }
     }

@@ -120,7 +120,7 @@ public class SlotMachineMgr : MonoBehaviour
         PlayerData.Instance.playerSkillUp = true;
         for (int i = 0; i < slotSkillObject.Length; i++)
         {
-            slotSkillObject[i].transform.localPosition = new Vector3(0, 300f, 0);
+            slotSkillObject[i].transform.localPosition = new Vector3(0, 450f, 0);
         }
 
         resultIndexList.Clear();
